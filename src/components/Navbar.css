@@ -1,0 +1,52 @@
+.from-navbar {
+    padding-top: 10px;
+    /* margin-top: 10px; */
+    background-color: #000814;
+    color: white;
+    font-family: "Chivo Mono", monospace;
+}
+h3, h6 {
+    font-family: "Chivo Mono", monospace;
+}
+.buffet {
+    /* margin-left: 40px; */
+    margin-right: 255px;
+    letter-spacing: 4px;
+    background-color: #FE5244;
+}
+.buffet>h6 {
+    margin-left: 40px;
+}
+.navbar {
+    display: flex;
+    margin-top: auto;
+    margin-bottom: auto;
+    justify-content: flex-start;
+}
+.link {
+    color: white;
+    text-decoration: none;
+    width: 6vw;
+    height: 28px;
+    border-radius: 5px;
+    text-align: center;
+    padding-top: 2px;
+}
+
+.link:hover {
+    color: #FE5244;
+}
+.active {
+    color: #FE5244;
+    text-decoration: none;
+    /* background: #fca311; */
+    border-radius: 5px;
+    text-align: center;
+    /* width: 8vw; */
+}
+.from-assist {
+    margin-top: 15px;
+    /* text-align: center; */
+    position: absolute;
+    right: 50px;
+}

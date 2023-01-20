@@ -1,0 +1,79 @@
+.from-booking {
+    color: white;
+    margin-top: 50px;
+    font-family: "Chivo Mono", monospace;
+    background-color: #000814;
+}
+p > b {
+    /* display: flex; */
+    margin-left: 5px;
+    font-family: 'Noto Serif Thai', serif;
+}
+.from-booking-input {
+    margin-top: 40px;
+    width: 70%;
+}
+.from-booking-btn {
+    margin-top: 30px;
+    font-family: 'Noto Serif Thai', serif;
+}
+.from-booking-btn > p {
+    font-size: 13px;
+}
+.booking-btn {
+    background-color: #FFB703;
+    width: 70%;
+}
+.booking-btn:hover {
+    background-color: #F8D273;
+} 
+/* .select-header {
+    
+} */
+.select-header {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 15px;
+}
+.select-style {
+    width: 150px;
+    height: 30px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: bold;
+}
+
+.select-style select {
+    padding: 5px 8px;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    background-color: #FFB703;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.select-style:after {
+    top: 50%;
+    left: 85%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(0, 0, 0, 0);
+    border-top-color: #000000;
+    border-width: 5px;
+    margin-top: -2px;
+    z-index: 100;
+}
+
+.select-style select:focus {
+    outline: none;
+}
+#dr {
+    background-color: #F8D273;
+} 

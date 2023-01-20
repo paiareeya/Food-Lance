@@ -1,0 +1,107 @@
+.from-admin-booking {
+    margin-top: 20px;
+    margin-left: 10px;
+    font-family: "Chivo Mono", monospace;
+    background-color: #000814;
+}
+.from-admin-booking-right {
+    display: flex;
+    margin-top: 20px;
+}
+.select-style-admin-booking {
+    width: 150px;
+    height: 30px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: bold;
+}
+
+.select-style-admin-booking select {
+    padding: 5px 8px;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    background-color: #FFB703;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.select-style-admin-booking:after {
+    top: 50%;
+    left: 85%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(0, 0, 0, 0);
+    border-top-color: #000000;
+    border-width: 5px;
+    margin-top: -2px;
+    z-index: 100;
+}
+
+.select-style-admin-booking select:focus {
+    outline: none;
+}
+#dr {
+    background-color: #F8D273;
+} 
+/* .text-b {
+    margin-top: 10px;
+} */
+.booking-name {
+    font-family: 'Noto Serif Thai', serif;
+}
+.booking-phone {
+    font-family: 'Noto Serif Thai', serif;
+    margin-top: 10px;
+}
+.booking-time {
+    font-family: 'Noto Serif Thai', serif;
+    margin-top: 10px;
+}
+
+.booking-amount-cus {
+    font-family: 'Noto Serif Thai', serif;
+    margin-top: 10px;
+    width: 30%;
+}
+.from-amount-cus-input > input[type=text] {
+    color: white;
+    border: none;
+    border-bottom: 2px solid #f55536;
+    background-color: #00081400;
+}
+.from-amount-cus-input > input[type=text]:hover {
+    border-bottom: 2px solid #ff773d;
+}
+#amount-cus, #checkin  {
+    height: 30px;
+}
+
+.booking-checkIn {
+    font-family: 'Noto Serif Thai', serif;
+    margin-top: 10px;
+}
+.booking-status {
+    font-family: 'Noto Serif Thai', serif;
+    margin-top: 10px;
+}
+.from-checkIn-input {
+    width: 30%;
+}
+.from-checkIn-input > input[type=text] {
+    color: white;
+    border: none;
+    border-bottom: 2px solid #f55536;
+    background-color: #00081400;
+}
+.from-checkIn-input > input[type=text]:hover {
+    border-bottom: 2px solid #ff773d;
+}
+

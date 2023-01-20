@@ -1,0 +1,143 @@
+.from-menu {
+    color: white;
+    font-family: "Chivo Mono", monospace;
+}
+.select-style {
+    margin-top: 40px;
+    margin-left: 8px
+}
+
+/* .list-item {
+    color: white;
+} */
+.list-item:hover {
+    background-color: #FFE5A6;
+}
+.from-listMenu {
+    margin-top: 50px;
+    text-align: center;
+}
+.btn-card {
+    background-color: #00081400;
+    border-style: none;
+}
+.card-list {
+    /* display: none; */
+    margin-left: auto;
+    margin-right: auto;
+    width: 150px;
+    height: 100px;
+    border-radius: 10px;
+    border-style: none;
+}
+.list-icon {
+    width: 50px;
+    height: 50px;
+    color: #ff773d;
+}
+.card-list-body {
+    margin-top: 10px;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+.card-list-body>p {
+    letter-spacing: 1px;
+    color: white;
+    font-family: 'Noto Serif Thai', serif;
+}
+.from-popup {
+    margin-top: 100px;
+}
+.from-popup-style {
+    background-color: #FFB703;
+    border-radius: 5px;
+    border-style: none;
+    width: 500px;
+    font-family: 'Noto Serif Thai', serif;
+}
+.modal-header {
+    border: none;
+}
+.modal-body {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+}
+.popup-body {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+}
+.body-image {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+.body-text {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+.body-text>h4 {
+    margin-top: 15px;
+    font-size: 20px;
+    font-family: 'Noto Serif Thai', serif;
+    display: flex;
+}
+.body-amount {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+.amount-style {
+    display: flex;
+}
+.amount-style>h4 {
+    font-family: 'Noto Serif Thai', serif;
+    margin-left: 20px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.amount-minus {
+    background-color: #ff773d;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+}
+.amount-minus:hover {
+    background-color: #f55536;
+    border: none;
+    width: 40px;
+    border-radius: 50px;
+}
+.amount-plus {
+    margin-left: 20px;
+    background-color: #023047;
+    border: none;
+    width: 40px;
+    border-radius: 50px;
+}
+.amount-plus:hover {
+    background-color: #001d3d;
+    border: none;
+    width: 40px;
+    border-radius: 50px;
+}
+.modal-footer {
+    border: none;
+}
+.btn-footer {
+    background-color: #023047;
+    border-style: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+.btn-footer:hover {
+    background-color: #001d3d;
+    border-style: none;
+}
+
+

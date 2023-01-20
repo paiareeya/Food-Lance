@@ -1,0 +1,77 @@
+.from-register {
+    color: white;
+    font-family: "Chivo Mono", monospace;
+    background-color: #000814;
+}
+.register-logo {
+    text-align: center;
+}
+/* .login-logo > img {
+    width: 200px;
+    height: 200px;
+    border-radius: 100px;
+    object-fit: cover;
+} */
+.col-register {
+    margin-top: 30px;
+    margin-left: 50px;
+}
+.register-header {
+    display: block;
+    font-family: "Chivo Mono", monospace;
+}
+.register-label {
+    margin-top: 50px;
+    width: 450px;
+    text-align: center;
+}
+from-register-input > label {
+    display: flex;
+    padding-left: 10px;
+}
+.from-register-input {
+    margin-top: 25px;
+    width: 90%;
+}
+input[type=text] {
+    color: white;
+    border: none;
+    border-bottom: 2px solid #f55536;
+    background-color: #00081400;
+}
+input[type=text]:hover {
+    border-bottom: 2px solid #ff773d;
+}
+.from-btn-sigUp {
+    padding-top: 30px;
+}
+.btn-sigUp {
+    width: 400px;
+    background-color: #FFB703;
+    color: black;
+}
+.btn-sigUp:hover {
+    background-color: #F8D273;
+    color: black;
+}
+.register-back {
+    /* color: #f55536; */
+    margin-top: 10px;
+    display: flex;
+}
+.register-back > .link-back {
+    color: #f55536;
+    text-decoration: none;
+    width: 100px;
+    height: 28px;
+    text-align: center;
+}
+.register-back > .link-back:hover {
+    color: #ff773d;
+}
+.from-register-input > h6 {
+    font-size: 12px;
+    display: flex;
+    margin-left: 10px;
+    color: #FFB703;
+}

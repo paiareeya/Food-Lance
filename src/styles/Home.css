@@ -1,0 +1,58 @@
+.from-home {
+    color: white;
+    padding-top: 20px;
+    font-family: "Chivo Mono", monospace;
+    text-align: center;
+}
+h1 {
+    font-family: "Chivo Mono", monospace;
+}
+.card-body>p {
+    letter-spacing: 2px;
+}
+.label-home {
+    margin-top: 100px;
+}
+.btn-booking {
+    margin-left: 200px;
+    margin-top: 60px;
+    display: flex;
+}
+.btn-danger {
+    width: 130px;
+}
+.from-category {
+    margin-top: 200px;
+}
+.group {
+    width: 200px;
+    height: 50px;
+    border-radius: 30px;
+    background-color: #2d2f32d4;
+}
+
+.register-back {
+    /* color: #f55536; */
+    margin-top: 10px;
+    display: flex;
+}
+.btn-booking > .link-booking {
+    color: white;
+    text-decoration: none;
+    /* width: 120px;
+    height: 28px; */
+    text-align: center;
+    
+}
+.link-booking {
+    background-color: #FE5244;
+    width: 100px;
+    height: 40px;
+    border-radius: 5px;
+}
+.link-booking > p {
+    margin-top: 7px;
+}
+.btn-booking > .link-booking:hover {
+    background-color: #ff773d;
+}

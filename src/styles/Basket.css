@@ -1,0 +1,86 @@
+.from-basket {
+    color: white;
+    font-family: "Chivo Mono", monospace;
+    /* font-family: 'Noto Serif Thai', serif; */
+}
+.card-basket {
+    width: 800px;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    
+}
+.card-header>h3 {
+    font-family: 'Noto Serif Thai', serif;
+}
+.card-body-basket {
+    margin-top: 30px;
+    text-align: center;
+}
+.basket-body-image>img {
+    width: 70px;
+    height: 70px;
+    border-radius: 10%;
+    object-fit: cover;
+}
+.basket-body-name {
+    margin-top: 25px;
+}
+.basket-body-amount {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-top: 15px;
+}
+.basket-body-amount {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+.basket-amount-style {
+    display: flex;
+}
+.text-amount>h5 {
+    margin-top: 5px;
+}
+.amount-minus-style {
+    background-color: #ff773d;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+}
+.amount-minus-style:hover {
+    background-color: #f55536;
+    border: none;
+    border-radius: 50px;
+}
+.amount-plus-style {
+    /* margin-left: 20px; */
+    background-color: #023047;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+}
+.amount-plus-style:hover {
+    background-color: #001d3d;
+    border: none;
+    border-radius: 50px;
+}
+.card-footer {
+    margin-top: 50px;
+    text-align: center;
+}
+.btn-submit {
+    background-color: #f55536;
+    border: none;
+    font-family: 'Noto Serif Thai', serif;
+}
+.btn-submit:hover {
+    background-color: #ff773d;
+    border: none;
+}
+h5 {
+    font-family: 'Noto Serif Thai', serif;
+}
