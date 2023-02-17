@@ -1,22 +1,25 @@
 .from-basket {
     color: white;
     font-family: "Chivo Mono", monospace;
-    /* font-family: 'Noto Serif Thai', serif; */
+    background-color: #000814;
 }
-.card-basket {
+.card-basket-header {
     width: 800px;
     display: flex;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 50px;
-    
+    margin-top: 30px;
 }
-.card-header>h3 {
+.card-basket-header > h3 {
     font-family: 'Noto Serif Thai', serif;
 }
 .card-body-basket {
+    display: block;
     margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
+    width: 500px;
 }
 .basket-body-image>img {
     width: 70px;
@@ -26,6 +29,8 @@
 }
 .basket-body-name {
     margin-top: 25px;
+    position: absolute;
+    /* left: 25%; */
 }
 .basket-body-amount {
     margin-top: auto;
@@ -56,7 +61,7 @@
     border-radius: 50px;
 }
 .amount-plus-style {
-    /* margin-left: 20px; */
+    /* margin-left: 5px; */
     background-color: #023047;
     border: none;
     width: 30px;
@@ -68,6 +73,9 @@
     border: none;
     border-radius: 50px;
 }
+/* .row-cols-3 > h4 {
+    margin-left: 5px;
+} */
 .card-footer {
     margin-top: 50px;
     text-align: center;
@@ -81,6 +89,35 @@
     background-color: #ff773d;
     border: none;
 }
-h5 {
+.list_orders {
+    height: 90px;
+}
+.show-list-menu {
+    text-align: center;
+}
+.status-order {
+    position: relative;
+    right: -20%;
+    color: #ff773d;
     font-family: 'Noto Serif Thai', serif;
+}
+.ul-list-order {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.li-list-order {
+    width: 300px;
+    background-color: #000814;
+    color: white;
+    font-family: 'Noto Serif Thai', serif;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+}
+.li-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 10%;
+    object-fit: cover;
 }

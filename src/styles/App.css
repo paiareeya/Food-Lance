@@ -1,6 +1,25 @@
+
+
 .App {
   background-color: #000814;
   height: 100vh;
 }
+/* 
+@media only screen and (max-width: 768px) {
+  .card {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .card {
+    width: 100%;
+  }
+} */
+/* @import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-popups/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-calendars/styles/material.css"; */
 
 

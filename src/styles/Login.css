@@ -7,12 +7,14 @@
 .login-logo {
     text-align: center;
 }
-/* .login-logo > img {
-    width: 200px;
-    height: 200px;
-    border-radius: 100px;
+.login-img {
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 350px;
+    height: 350px;
     object-fit: cover;
-} */
+}
 .col-login {
     margin-top: 30px;
     margin-left: 70px;
@@ -20,6 +22,8 @@
 }
 .login-header {
     display: block;
+}
+.login-header > h1, label, .btn-sigin > b {
     font-family: "Chivo Mono", monospace;
 }
 .login-label {
@@ -77,6 +81,7 @@ input[type=text]:hover {
 .signUp > p {
     font-size: 13px;
     margin-top: 3px;
+    font-family: "Chivo Mono", monospace;
 }
 .signUp > .link-signup {
     color: #f55536;
@@ -85,7 +90,12 @@ input[type=text]:hover {
     height: 28px;
     border-radius: 5px;
     text-align: center;
+    font-family: "Chivo Mono", monospace;
 }
 .signUp > .link-signup:hover {
     color: #ff773d;
+}
+.login-text {
+    display: flex;
+    margin-left: 10px;
 }

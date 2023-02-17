@@ -14,6 +14,10 @@ import AdminMenu from './pages/admin/Admin-Menu';
 import Admin from './pages/admin/Admin';
 import AdminBooking from './pages/admin/Admin-Booking';
 import AdminReport from './pages/admin/Admin-Report';
+import AdminOrders from './pages/admin/Admin-Orders';
+import SelectBooking from './pages/admin/select_booking';
+import SettingTime from './pages/admin/setting_times';
+import AdminWalkIn from './pages/admin/Admin-WalkIn';
 
 function App() {
   return (
@@ -32,7 +36,11 @@ function App() {
             <Route path='admin' element={<Admin />} />
             <Route path='admin-menu' element={<AdminMenu />} />
             <Route path='admin-booking' element={<AdminBooking />} />
+            <Route path='admin-walkIn' element={<AdminWalkIn />} />
             <Route path='admin-report' element={<AdminReport />} />
+            <Route path='admin-kitchen' element={<AdminOrders />} />
+            <Route path='select-booking' element={<SelectBooking />} />
+            <Route path='setting-times' element={<SettingTime />} />
           </Route>
         </Routes>
       </BrowserRouter>

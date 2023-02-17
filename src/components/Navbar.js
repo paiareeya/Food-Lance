@@ -45,27 +45,27 @@ class Navbar extends Component {
                             <div className="from-assist">
                                 <div className="container">
                                     <div className="row row-cols-5">
-                                        <div className="col icon">
+                                        <div className="col icon-tab">
                                             <NavLink to='/about' className={({ isActive }) => isActive ? 'link active' : 'link'}>
                                                 <FontAwesomeIcon icon={faPersonCircleQuestion}></FontAwesomeIcon>
                                             </NavLink>
                                         </div>
-                                        <div className="col icon">
+                                        <div className="col icon-tab">
                                             <NavLink to='/about' className={({ isActive }) => isActive ? 'link active' : 'link'}>
                                                 <FontAwesomeIcon icon={faMoneyBill}></FontAwesomeIcon>
                                             </NavLink>
                                         </div>
-                                        <div className="col icon">
+                                        <div className="col icon-tab">
                                             <NavLink to='/basket' className={({ isActive }) => isActive ? 'link active' : 'link'}>
                                                 <FontAwesomeIcon icon={faBasketShopping}></FontAwesomeIcon>
                                             </NavLink>
                                         </div>
-                                        <div className="col icon">
+                                        <div className="col icon-tab">
                                             <NavLink to='/about' className={({ isActive }) => isActive ? 'link active' : 'link'}>
                                                 <FontAwesomeIcon icon={faBell}></FontAwesomeIcon>
                                             </NavLink>
                                         </div>
-                                        <div className="col icon">
+                                        <div className="col icon-tab">
                                             <NavLink to='/login' className={({ isActive }) => isActive ? 'link active' : 'link'}>
                                                 <FontAwesomeIcon icon={faRightToBracket}></FontAwesomeIcon>
                                             </NavLink>

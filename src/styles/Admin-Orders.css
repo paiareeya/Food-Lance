@@ -1,0 +1,44 @@
+.form-admin-kitchen {
+    color: white;
+    font-family: "Chivo Mono", monospace;
+    background-color: #000814;
+    margin-top: 10px;
+}
+.card-order-kitchen {
+    border: none;
+    margin-top: 20px;
+}
+.header-kitchen-bk {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+}
+.ul-list-order-kitchen {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.li-list-order-kitchen {
+    background-color: white;
+    color: #000814;
+    font-family: 'Noto Serif Thai', serif;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+}
+.li-image-kitchen {
+    width: 20px;
+    height: 20px;
+    border-radius: 10%;
+    object-fit: cover;
+}
+.form-check-input {
+    margin-left: auto;
+    margin-right: auto;
+}
+.btn-kitchen-success {
+    width: 100%;
+    background-color: #f55536;
+    border: none;
+}
+.btn-kitchen-success:hover {
+    background-color: #ff773d;
+}

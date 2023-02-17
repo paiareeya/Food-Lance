@@ -2,6 +2,7 @@ import { Component } from "react";
 import '../styles/Login.css';
 import axios from 'axios';
 import { Navigate, NavLink } from "react-router-dom";
+import Constants from '../constants';
 
 class Login extends Component {
 
@@ -23,36 +24,18 @@ class Login extends Component {
         this.setState({ password: e.target.value });
     }
 
-    // Sigin = (username) => {
-    //     console.log(username);
-
-    //     const getlogin = this.state.datalist
-
-    //     getlogin.push({
-    //         username: this.state.username,
-    //         password: this.state.password
-
-    //     })
-    //     this.setState({ datalist: getlogin })
-
-    //     console.log(this.state.datalist);
-    // }
-
     onGetData = () => {
-
-        axios.post('http://192.168.1.21:8080/auth-admin', {
+        axios.post(Constants.URL + Constants.API.LOGIN.AUTH_ADMIN, {
             "username": this.state.username,
             "password": this.state.password
         }).then(response => {
             console.log(response.data);
-            console.log('-----------');
 
             if (response.data.auth) {
                 this.setState({
                     loginsucces: true
                 })
             }
-            // alert('username หรือ password ไม่ถูกต้อง')
         });
 
     }
@@ -62,11 +45,11 @@ class Login extends Component {
             <div className="from-login">
                 {this.state.loginsucces && <Navigate to="/admin" />}
                 <div className="container">
-                    <div class="col-md">
+                    <div className="col-md">
                         <div className="row row-cols-2">
                             <div className="col">
                                 <div className="login-logo">
-                                    image Logo
+                                    <img src="https://i.pinimg.com/564x/e2/79/18/e2791866602f193c1c92b6aeb164c18c.jpg" className="login-img" />
                                 </div>
                             </div>
                             <div className="col">
@@ -82,8 +65,8 @@ class Login extends Component {
                                             <div className="col">
                                                 <form className="from-login-input">
                                                     <p>
-                                                        <label>Username</label>
-                                                        <input className="w3-input" type="text" id="username"
+                                                        <label className="login-text">Username</label>
+                                                        <input className="w3-input" type="text" id="username" style={{ color: 'white' }}
                                                             value={this.state.username}
                                                             onChange={(e) => { this.onChangeUsername(e) }} />
                                                     </p>
@@ -92,8 +75,8 @@ class Login extends Component {
                                             <div className="col">
                                                 <form className="from-login-input">
                                                     <p>
-                                                        <label>Password</label>
-                                                        <input className="w3-input" type="text" id="password"
+                                                        <label className="login-text">Password</label>
+                                                        <input className="w3-input" type="text" id="password" style={{ color: 'white' }}
                                                             value={this.state.password}
                                                             onChange={(e) => { this.onChangePassword(e) }} />
                                                     </p>
@@ -105,7 +88,7 @@ class Login extends Component {
                                                 <NavLink className={({ isActive }) =>
                                                     isActive ? 'link-signIn active' : 'link-signIn'}>
                                                     <button type="button" className="btn btn-dark btn-sigin"
-                                                        onClick={() => { this.onGetData() }}>Sign In</button>
+                                                        onClick={() => { this.onGetData() }}><b>Sign In</b></button>
                                                 </NavLink>
                                             </div>
                                         </div>

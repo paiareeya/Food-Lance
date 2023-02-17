@@ -1,12 +1,12 @@
 import { Component } from "react";
+import '../../styles/Admin-WalkIn.css';
 import { Button, Modal } from "react-bootstrap";
-import '../../styles/Admin-Booking.css';
+import Constants from '../../constants';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
-import Constants from '../../constants';
 
-class AdminBooking extends Component {
+class AdminWalkIn extends Component {
 
     constructor(props) {
         super(props);
@@ -14,48 +14,30 @@ class AdminBooking extends Component {
             showAddBooking: false,
             showUpdate: false,
             showSuccess: false,
+            showWalkIn: false,
             showFaill: false,
             admin_bookings: '',
-            // admin_amount_cus: '',
-            // check_in: '',
-            // check_out: '',
-            // status_booking: '',
-            dataBooking: [],
-            booking_name: '',
-            booking_amount: '',
             dateName: '',
             datePhone: '',
             dateAmount: '',
             time: '',
             dateTime: '',
-            dateTimeCheckIn: '',
             list_bookings: [],
             get_dataBooking: [],
-            list_time: [],
+            walkin_bookings: [],
+            dataBooking: [],
             id_status: '',
             status_booking: [
                 {
                     id: 1,
-                    name: 'จอง',
-                    bkstatus: true
+                    name: 'Walk In',
+                    isWalkIn: true
                 },
                 {
                     id: 2,
-                    name: 'Check In',
-                    isCheckIn: true,
-                    isCheckOut: false
-                },
-                {
-                    id: 3,
                     name: 'Check Out',
                     isCheckIn: false,
                     isCheckOut: true
-                },
-                {
-                    id: 4,
-                    name: 'Late',
-                    isCheckIn: false,
-                    isCheckOut: false
                 }
             ]
         }
@@ -69,63 +51,36 @@ class AdminBooking extends Component {
         this.setState({
             showAddBooking: false,
             showUpdate: false,
+            showWalkIn: false,
             showSuccess: false,
-            showFaill: false,
+            showFaill: false
         })
     }
     onChangeBooking = (e) => {
         this.setState({ admin_bookings: e.target.value });
 
-        if (e.target.value === " " || this.state.time === " ") {
+        if (e.target.value === " ") {
             return
         }
-        axios.post(Constants.URL + Constants.API.BOOKING.FIND_ONE_BOOKING, {
-            "bktable": e.target.value,
-            "bktime": this.state.time,
-        }).then(response => {
-            console.log('response:', response.data);
-            const getlist = response.data
-            const name = response.data.map(({ bkname }) => bkname)
-            const phone = response.data.map(({ bknumber }) => bknumber)
-            const amount = response.data.map(({ bkcustomer }) => bkcustomer)
-            const time = response.data.map(({ bktime }) => bktime)
-            const time_checkIn = response.data.map(({ checkin }) => checkin)
+        axios.post(Constants.URL + Constants.API.BOOKING.FIND_WALKIN, {
+            "bktable": e.target.value
+        })
+            .then(response => {
+                // console.log(response.data);
+                const BK = response.data
 
-            const Moment = require("moment-timezone")
-            console.log('time_checkIn', time_checkIn);
-            const checkIn = time_checkIn[0] == undefined ? "" : Moment(time_checkIn, "yyyy-MM-DDTHH:mm:ss.SSSZ").tz("Asia/Bangkok").format("DD/MM/yyyy HH:mm"); //format("DD/MM/yyyy HH:mm") สิ่งที่เราต้องการที่จะได้ ถ้าอยากได้แค่เวลา ใส่แค่ HH:mm
+                this.setState({
+                    get_dataBooking: BK,
+                    walkin_bookings: BK,
+                    dateName: response.data.bkname,
+                    datePhone: response.data.bknumber,
+                    dateAmount: response.data.bkcustomer
+                })
+            });
 
-            console.log('name:', name, 'phone:', phone, 'amount:', amount);
-            this.setState({
-                get_dataBooking: getlist,
-                dateTime: time,
-                dateTimeCheckIn: checkIn,
-                dateName: name,
-                datePhone: phone,
-                dateAmount: amount,
-            })
-        });
-    }
-    onChangeAmountCus = (e) => {
-        this.setState({ admin_amount_cus: e.target.value });
-    }
-    onChangeCheckIn = (e) => {
-        this.setState({ check_in: e.target.value });
-    }
-    onChangeCheckOut = (e) => {
-        this.setState({ check_out: e.target.value });
     }
     onChangeStatusBooking = (e) => {
         this.setState({ id_status: e.target.value });
-    }
-    onChangeAddBookingName = (e) => {
-        this.setState({ booking_name: e.target.value });
-    }
-    onChangeAddBookingAmount = (e) => {
-        this.setState({ booking_amount: e.target.value });
-    }
-    handleAddBooking = () => {
-        this.setState({ showAddBooking: true })
     }
     onChangeNameCus = (e) => {
         this.setState({ dateName: e.target.value });
@@ -136,43 +91,6 @@ class AdminBooking extends Component {
     onChangeAmountCus = (e) => {
         this.setState({ dateAmount: e.target.value });
     }
-    onChangeTime = (e) => {
-        this.setState({ time: e.target.value });
-
-        const get_time = e.target.value
-        console.log('get_time:', get_time);
-
-        if (this.state.admin_bookings === " " || get_time === " ") {
-            return
-        }
-
-        axios.post(Constants.URL + Constants.API.BOOKING.FIND_ONE_BOOKING, {
-            "bktable": this.state.admin_bookings,
-            "bktime": get_time,
-        }).then(response => {
-            console.log('response:', response.data);
-            const getlist = response.data
-            const name = response.data.map(({ bkname }) => bkname)
-            const phone = response.data.map(({ bknumber }) => bknumber)
-            const amount = response.data.map(({ bkcustomer }) => bkcustomer)
-            const time = response.data.map(({ bktime }) => bktime)
-            const time_checkIn = response.data.map(({ checkin }) => checkin)
-
-            const Moment = require("moment-timezone")
-            console.log('time_checkIn', time_checkIn);
-            const checkIn = time_checkIn[0] == undefined ? "" : Moment(time_checkIn, "yyyy-MM-DDTHH:mm:ss.SSSZ").tz("Asia/Bangkok").format("DD/MM/yyyy HH:mm"); //format("DD/MM/yyyy HH:mm") สิ่งที่เราต้องการที่จะได้ ถ้าอยากได้แค่เวลา ใส่แค่ HH:mm
-
-            console.log('name:', name, 'phone:', phone, 'amount:', amount);
-            this.setState({
-                get_dataBooking: getlist,
-                dateTime: time,
-                dateTimeCheckIn: checkIn,
-                dateName: name,
-                datePhone: phone,
-                dateAmount: amount,
-            })
-        });
-    }
 
     onFindBooking = () => {
         axios.post(Constants.URL + Constants.API.BOOKING.FIND_BOOKING)
@@ -182,41 +100,20 @@ class AdminBooking extends Component {
                     list_bookings: BK
                 })
             });
-
-        axios.post(Constants.URL + Constants.API.TIMES.FIND_TIME)
-            .then(response => {
-                this.setState({
-                    list_time: response.data
-                })
-            });
     }
 
-    onClickAddBooking = () => {
-
-        axios.post(Constants.URL + Constants.API.BOOKING.ADMIN_CREATE_BOOKING, {
-            "name": this.state.booking_name,
-            "chair": this.state.booking_amount
-        }).then(response => {
-            console.log(response.data);
-            this.setState({
-                showAddBooking: false,
-                booking_name: '',
-                booking_amount: ''
-            })
-            this.onFindBooking();
-        });
-    }
 
     UploadBooking = () => {
         const get = this.state.get_dataBooking;
-        const getId = get.map(item => item._id);
-        const getBktable = get.map(item => item.bktable);
-
         const getList_booking = this.state.list_bookings.filter(item => item.name == this.state.admin_bookings)
-
+        const getId = get._id
+        const getBktable = get.bktable
+        console.log('getId', getId);
+        console.log('getBktable', getBktable);
+        // console.log('this.state.status_booking', this.state.status_booking[0].id);
         const getStatus = this.state.status_booking.filter(item => item.id == this.state.id_status);
+        console.log(getStatus);
 
-        // customer Create Booking to isBooking
         if (getStatus[0].id === 1) {
             const BK_name = this.state.admin_bookings;
             console.log('BK_name:', BK_name);
@@ -231,21 +128,20 @@ class AdminBooking extends Component {
                 "bkname": this.state.dateName,
                 "bknumber": this.state.datePhone,
                 "bkcustomer": this.state.dateAmount,
-                "bktime": this.state.time,
-                "isBooking": true
+                "isWalkIn": getStatus[0].isWalkIn,
             }).then(response => {
                 console.log(response.data);
             });
             this.setState({
-                showSuccess: true,
+                showWalkIn: true,
                 booking_bookings: '',
                 cus_name: '',
                 cus_phone: '',
                 cus_amounts: '',
             })
         }
-        // Admin Uodate Booking to Check In or Check Out
-        else if (getStatus[0].id === 2 || getStatus[0].id === 3) {
+        // Admin Uodate Booking to Check Out
+        else if (getStatus[0].id === 2) {
             axios.post(Constants.URL + Constants.API.BOOKING.UPDATE_BOOKING, {
                 "_id": getId,
                 "bktable": getBktable,
@@ -257,33 +153,12 @@ class AdminBooking extends Component {
                     showUpdate: true
                 })
                 this.setState({
-                    dateName: '',
-                    datePhone: '',
-                    dateAmount: '',
-                    dateTime: '',
                     admin_bookings: '',
-                    time: '',
-                    id_status: ''
-                })
-                this.onFindBooking();
-            });
-        }
-        // Admin Update Time late Booking
-        else {
-            axios.post(Constants.URL + Constants.API.BOOKING.UPDATE_STATUS_LATE, {
-                "_id": getId,
-                "bktable": getBktable
-            }).then(response => {
-                console.log(response.data);
-                this.setState({
-                    showUpdate: true
-                })
-                this.setState({
                     dateName: '',
                     datePhone: '',
                     dateAmount: '',
                     dateTime: '',
-                    dateTimeCheckIn: ''
+                    id_status: ''
                 })
                 this.onFindBooking();
             });
@@ -293,25 +168,11 @@ class AdminBooking extends Component {
 
     render() {
         return (
-            <div className="from-admin-booking">
+            <div className="form-admin-walkIn">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-7">
                             <div className="col">
-                                <div className="row">
-                                    <div className="col-sm-2">
-                                        <button type="button" className="btn btn-add-booking"
-                                            onClick={() => { this.handleAddBooking() }}>
-                                            <b>Add</b>
-                                        </button>
-                                    </div>
-                                    {/* <div className="col-sm-10">
-                                        <button type="button" className="btn btn-delete-booking"
-                                            onClick={() => { this.handleDeleteBooking() }}>
-                                            <b>Delete</b>
-                                        </button>
-                                    </div> */}
-                                </div>
                                 <h1>Images Booking</h1>
                             </div>
                         </div>
@@ -327,25 +188,15 @@ class AdminBooking extends Component {
                                                         เลือกโต๊ะ
                                                     </option>
                                                     {this.state.list_bookings.map((item, i) => (
-                                                        <option id="dr" key={'brand' + i} value={item.name} style={{ fontFamily: 'Chivo Mono' }}>
+                                                        <option id="dr" key={'brand' + i} value={item.name}>
                                                             {item.name}
                                                         </option>
                                                     ))}
                                                 </select>
                                             </div>
                                             <div className="cun-bk">{'|'}</div>
-                                            <div className="select-style-admin-booking" style={{ marginLeft: '10px' }}>
-                                                <select value={this.state.time}
-                                                    onChange={(e) => { this.onChangeTime(e) }} >
-                                                    <option id="dr" value={' '} >
-                                                        เลือกเวลา
-                                                    </option>
-                                                    {this.state.list_time.map((item, i) => (
-                                                        <option id="dr" key={'brand' + i} value={item.bktime} style={{ fontFamily: 'Chivo Mono' }}>
-                                                            {item.bktime}
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                            <div className="select-style-walkIn" style={{ marginLeft: '10px' }}>
+                                                <b>Walk In</b>
                                             </div>
                                         </div>
                                         <div className="col">
@@ -357,7 +208,7 @@ class AdminBooking extends Component {
                                                                 <p>
                                                                     <label className="text-booking">ชื่อผู้จอง :</label>
                                                                     <input className="w3-input" style={{ color: 'white' }} type="text" id="amount-cus"
-                                                                        value={this.state.dateName}
+                                                                        value={this.state.dateName || ''}
                                                                         onChange={(e) => { this.onChangeNameCus(e) }} />
                                                                 </p>
                                                             </form>
@@ -369,23 +220,10 @@ class AdminBooking extends Component {
                                                                 <p>
                                                                     <label className="text-booking">เบอร์ :</label>
                                                                     <input className="w3-input" style={{ color: 'white' }} type="text" id="amount-cus"
-                                                                        value={this.state.datePhone}
+                                                                        value={this.state.datePhone || ''}
                                                                         onChange={(e) => { this.onChangePhoneCus(e) }} />
                                                                 </p>
                                                             </form>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col">
-                                                        <div className="booking-time">
-                                                            <p className="text-booking">เวลาจอง : {this.state.dateTime}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col">
-                                                        <div className="booking-time">
-                                                            <p className="text-booking-time">เวลา
-                                                                <span style={{ fontFamily: 'Chivo Mono', marginLeft: '10px' }}>Check In :</span>
-                                                                {this.state.dateTimeCheckIn}
-                                                            </p>
                                                         </div>
                                                     </div>
                                                     <div className="col">
@@ -394,7 +232,7 @@ class AdminBooking extends Component {
                                                                 <p>
                                                                     <label className="text-booking">จำนวนลูกค้า :</label>
                                                                     <input className="w3-input" style={{ color: 'white' }} type="text" id="amount-cus"
-                                                                        value={this.state.dateAmount}
+                                                                        value={this.state.dateAmount || ''}
                                                                         onChange={(e) => { this.onChangeAmountCus(e) }} />
                                                                 </p>
                                                             </form>
@@ -434,47 +272,6 @@ class AdminBooking extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <Modal className="from-popup-add-category" show={this.state.showAddBooking} onHide={() => { this.handleClose() }}>
-                                <div className="from-popup-style-add">
-                                    <Modal.Header closeButton className="from-popup-style-add">
-                                        <Modal.Title><b style={{ fontFamily: 'Noto Serif Thai' }}>เพิ่มโต๊ะ</b></Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body className="from-popup-style">
-                                        <div className="popup-body-category">
-                                            <div className="container">
-                                                <div className="row row-cols-1">
-                                                    <div className="col">
-                                                        <div className="body-text-add">
-                                                            <form className="from-add-category-input">
-                                                                <label style={{ fontFamily: 'Noto Serif Thai' }}>เลขโต๊ะ</label>
-                                                                <input className="w3-input" type="text" id="id"
-                                                                    value={this.state.booking_name}
-                                                                    onChange={(e) => { this.onChangeAddBookingName(e) }} />
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col">
-                                                        <div className="body-text-add">
-                                                            <form className="from-add-category-input">
-                                                                <label style={{ fontFamily: 'Noto Serif Thai' }}>จำนวนที่นั่ง</label>
-                                                                <input className="w3-input" type="text" id="name"
-                                                                    value={this.state.booking_amount}
-                                                                    onChange={(e) => { this.onChangeAddBookingAmount(e) }} />
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Modal.Body>
-                                    <Modal.Footer className="from-popup-style">
-                                        <Button className="btn-footer" variant="primary"
-                                            onClick={() => { this.onClickAddBooking() }}>
-                                            ยืนยัน
-                                        </Button>
-                                    </Modal.Footer>
-                                </div>
-                            </Modal>
 
                             <Modal className="from-popup-booking-Update" show={this.state.showUpdate}
                                 onHide={() => { this.handleClose() }}>
@@ -484,7 +281,7 @@ class AdminBooking extends Component {
                                     </Modal.Header>
                                     <Modal.Body className="from-popup-style">
                                         <div className="body-text-booking-Update">
-                                            <FontAwesomeIcon icon={faCircleCheck} className="icon-faCircleCheck-booking"></FontAwesomeIcon> <br />
+                                            <FontAwesomeIcon icon={faCircleCheck} className="icon-faCircleCheck-Walk"></FontAwesomeIcon> <br />
                                             <b style={{ fontFamily: 'Chivo Mono' }}>Congats! Your Update successfully done</b>
                                         </div>
                                     </Modal.Body>
@@ -497,7 +294,7 @@ class AdminBooking extends Component {
                                 </div>
                             </Modal>
 
-                            <Modal className="from-popup-success" show={this.state.showSuccess}
+                            <Modal className="from-popup-success" show={this.state.showWalkIn}
                                 onHide={() => { this.handleClose() }}>
                                 <div className="from-popup-style-success">
                                     <Modal.Header closeButton className="from-popup-style-add">
@@ -505,8 +302,10 @@ class AdminBooking extends Component {
                                     </Modal.Header>
                                     <Modal.Body className="from-popup-style">
                                         <div className="body-text-success">
-                                            <FontAwesomeIcon icon={faCircleCheck} className="icon-faCircleCheck-booking"></FontAwesomeIcon> <br />
-                                            <b style={{ fontFamily: 'Noto Serif Thai' }}>จองโต๊ะสำเร็จ</b>
+                                            <FontAwesomeIcon icon={faCircleCheck} className="icon-faCircleCheck-Walk"></FontAwesomeIcon> <br />
+                                            <b style={{ fontFamily: 'Chivo Mono' }}>Walk In
+                                                <b style={{ fontFamily: 'Noto Serif Thai', marginLeft: '10px' }}>สำเร็จ</b>
+                                            </b>
                                         </div>
                                     </Modal.Body>
                                     <Modal.Footer className="from-popup-style">
@@ -541,9 +340,9 @@ class AdminBooking extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     }
 }
 
-export default AdminBooking;
+export default AdminWalkIn;

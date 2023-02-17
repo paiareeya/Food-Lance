@@ -1,0 +1,96 @@
+.from-admin-report {
+    margin-top: 20px;
+    /* margin-left: 10px; */
+    text-align: center;
+    font-family: "Chivo Mono", monospace;
+    background-color: #000814;
+    color: white;
+    width: 70vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.report-header {
+    margin-top: 30px;
+}
+.report-body {
+    margin-top: 30px;
+}
+.report-footer {
+    margin-top: 30px;
+}
+.card-report {
+    border: none;
+}
+.card-header {
+    background-color: #023047;
+    height: 40px;
+    font-family: 'Noto Serif Thai', serif;
+}
+.header-report {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+}
+#date {
+    background-color: white;
+}
+.col-dates {
+    display: flex;
+}
+.form-date-to {
+    margin-left: 20px;
+}
+input[id="date"] {
+    border-radius: 5px;
+    border: none;
+    height: 30px;
+    width: 160px;
+    margin-left: 10px;
+    padding-left: 10px;
+    font-family: "Chivo Mono", monospace;
+}
+.btn-search-date {
+    background-color: #FFB703;
+    color: #000814;
+    margin-left: 20px;
+    border: none;
+    height: 31px;
+    font-family: 'Noto Serif Thai', serif;
+}
+.btn-search-date:hover {
+    background-color: #f19143;
+}
+.text-header-report { 
+    display: flex;
+}
+.text-header-report > label {
+    font-family: "Chivo Mono", monospace;
+    margin-left: 10px;
+}
+.header-text-thai {
+    font-family: 'Noto Serif Thai', serif;
+}
+.card-body {
+    color: #000814;
+    font-family: 'Noto Serif Thai', serif;
+}
+.list-repoet {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 50px;
+}
+.text-list-report {
+    font-family: "Chivo Mono", monospace;
+}
+.card-report-footer {
+    background-color: #FFB703;
+    height: 45px;
+}
+.card-title-tital {
+    position: absolute;
+    bottom: 2px;
+    left: 16px;
+    color: #000814;
+    font-family: "Chivo Mono", monospace;
+    font-weight: bold;
+    font-size: 18px;
+}

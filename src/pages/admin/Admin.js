@@ -3,9 +3,15 @@ import '../../styles/Admin.css'
 import { NavLink } from "react-router-dom";
 import AdminMenu from "./Admin-Menu";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUtensils, faNotesMedical, faFileLines, faGear, faAngleDown } from '@fortawesome/free-solid-svg-icons'
+import { faUtensils, faNotesMedical, faFileLines, faGear, faAngleDown, faKitchenSet, faTable, faStore } from '@fortawesome/free-solid-svg-icons'
 import AdminBooking from "./Admin-Booking";
 import AdminReport from "./Admin-Report";
+import AdminOrders from "./Admin-Orders";
+import SelectBooking from "./select_booking";
+import { Dropdown } from "react-bootstrap";
+import SettingTime from "./setting_times";
+import SettingStore from "./setting_store";
+import AdminWalkIn from "./Admin-WalkIn";
 
 class Admin extends Component {
 
@@ -51,24 +57,56 @@ class Admin extends Component {
                                             </div>
                                         </div>
                                         <div className="col">
-                                            {/* <div className="teble-menu">
-                                                <NavLink to='/' className={({ isActive }) =>
-                                                    isActive ? 'link-menu active-menu' : 'link-menu'
-                                                }><p>food categories</p></NavLink>
-                                            </div> */}
-                                        </div>
-                                        <div className="col">
-                                            <div className="teble-menu">
-                                                <NavLink
-                                                    className={showPage === 'booking' ? 'link-menu active-menu' : 'link-menu'}
-                                                    onClick={() => { this.ClickMenu('booking') }}>
-                                                    <p>
+                                            <div className="teble-menu dropdown-bk">
+                                                <button className={showPage === 'booking' ? 'link-bk active-bk' : 'link-bk'}
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                                    <p style={{ fontSize: '13px' }}>
                                                         <FontAwesomeIcon icon={faNotesMedical}
-                                                            style={{ marginTop: '3px' }}>
+                                                            style={{ marginTop: '10px' }}>
                                                         </FontAwesomeIcon>
                                                         <label className="label-menu">Booking</label>
+                                                        <FontAwesomeIcon icon={faAngleDown}
+                                                            style={{
+                                                                marginTop: '3px',
+                                                                marginLeft: '23px'
+                                                            }}>
+                                                        </FontAwesomeIcon>
                                                     </p>
-                                                </NavLink>
+                                                </button>
+                                                <div className="collapse" id="collapseExample">
+                                                    <div className="card card-body card-body-Dropdown">
+                                                        <NavLink
+                                                            className={showPage === 'booking' ? 'link-Dropdown active-Dropdown' : 'link-Dropdown'}
+                                                            onClick={() => { this.ClickMenu('booking') }}>
+                                                            <p style={{ fontSize: '11px' }}>
+                                                                <FontAwesomeIcon icon={faNotesMedical}
+                                                                    style={{ marginTop: '10px', marginLeft: '10px' }}>
+                                                                </FontAwesomeIcon>
+                                                                <label className="label-menu">Booking</label>
+                                                            </p>
+                                                        </NavLink>
+                                                        <NavLink
+                                                            className={showPage === 'walkIn' ? 'link-Dropdown active-Dropdown' : 'link-Dropdown'}
+                                                            onClick={() => { this.ClickMenu('walkIn') }}>
+                                                            <p style={{ fontSize: '11px' }}>
+                                                                <FontAwesomeIcon icon={faNotesMedical}
+                                                                    style={{ marginTop: '10px', marginLeft: '10px' }}>
+                                                                </FontAwesomeIcon>
+                                                                <label className="label-menu">Walk In</label>
+                                                            </p>
+                                                        </NavLink>
+                                                        <NavLink
+                                                            className={showPage === 'select' ? 'link-Dropdown active-Dropdown' : 'link-Dropdown'}
+                                                            onClick={() => { this.ClickMenu('select') }}>
+                                                            <p style={{ fontSize: '11px' }}>
+                                                                <FontAwesomeIcon icon={faTable}
+                                                                    style={{ marginTop: '10px', marginLeft: '10px' }}>
+                                                                </FontAwesomeIcon>
+                                                                <label className="label-menu" style={{ fontSize: '11px' }}>Status booking</label>
+                                                            </p>
+                                                        </NavLink>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="col">
@@ -87,15 +125,61 @@ class Admin extends Component {
                                         </div>
                                         <div className="col">
                                             <div className="teble-menu">
-                                                <NavLink to='/' className={({ isActive }) =>
-                                                    isActive ? 'link-menu active-menu' : 'link-menu'}>
-                                                    <p><FontAwesomeIcon icon={faGear}
-                                                        style={{ marginTop: '3px' }}></FontAwesomeIcon>
-                                                        <label className="label-menu">Settings</label>
-                                                        <FontAwesomeIcon icon={faAngleDown}
-                                                            style={{ marginTop: '3px', marginLeft: '15px' }}></FontAwesomeIcon>
+                                                <NavLink
+                                                    className={showPage === 'kitchen' ? 'link-menu active-menu' : 'link-menu'}
+                                                    onClick={() => { this.ClickMenu('kitchen') }}>
+                                                    <p>
+                                                        <FontAwesomeIcon icon={faKitchenSet}
+                                                            style={{ marginTop: '3px' }}>
+                                                        </FontAwesomeIcon>
+                                                        <label className="label-menu">Orders</label>
                                                     </p>
                                                 </NavLink>
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                            <div className="teble-menu dropdown-bk">
+                                                <button className={showPage === 'setting' ? 'link-bk active-bk' : 'link-bk'}
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample">
+                                                    <p style={{ fontSize: '13px' }}>
+                                                        <FontAwesomeIcon icon={faGear}
+                                                            style={{ marginTop: '10px' }}>
+
+                                                        </FontAwesomeIcon>
+                                                        <label className="label-menu">Settings</label>
+                                                        <FontAwesomeIcon icon={faAngleDown}
+                                                            style={{
+                                                                marginTop: '3px',
+                                                                marginLeft: '15px'
+                                                            }}>
+                                                        </FontAwesomeIcon>
+                                                    </p>
+                                                </button>
+                                                <div className="collapse" id="collapseExample2">
+                                                    <div className="card card-body card-body-Dropdown">
+                                                        <NavLink
+                                                            className={showPage === 'setting' ? 'link-Dropdown active-Dropdown' : 'link-Dropdown'}
+                                                            onClick={() => { this.ClickMenu('setting') }}>
+                                                            <p style={{ fontSize: '11px' }}>
+                                                                <FontAwesomeIcon icon={faGear}
+                                                                    style={{ marginTop: '10px', marginLeft: '10px' }}>
+
+                                                                </FontAwesomeIcon>
+                                                                <label className="label-menu">Setting</label>
+                                                            </p>
+                                                        </NavLink>
+                                                        <NavLink
+                                                            className={showPage === 'store' ? 'link-Dropdown active-Dropdown' : 'link-Dropdown'}
+                                                            onClick={() => { this.ClickMenu('store') }}>
+                                                            <p style={{ fontSize: '10px' }}>
+                                                                <FontAwesomeIcon icon={faStore}
+                                                                    style={{ marginTop: '10px', marginLeft: '10px' }}>
+                                                                </FontAwesomeIcon>
+                                                                <label className="label-menu">Store Information</label>
+                                                            </p>
+                                                        </NavLink>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -107,6 +191,11 @@ class Admin extends Component {
                                 {showPage === 'menu' && <AdminMenu />}
                                 {showPage === 'booking' && <AdminBooking />}
                                 {showPage === 'report' && <AdminReport />}
+                                {showPage === 'kitchen' && <AdminOrders />}
+                                {showPage === 'walkIn' && <AdminWalkIn />}
+                                {showPage === 'select' && <SelectBooking />}
+                                {showPage === 'setting' && <SettingTime />}
+                                {showPage === 'store' && <SettingStore />}
                             </div>
                         </div>
                     </div>

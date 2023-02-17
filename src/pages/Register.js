@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Navigate, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import Constants from '../constants';
 
 class Register extends Component {
 
@@ -53,7 +54,7 @@ class Register extends Component {
 
     onGetData = () => {
 
-        axios.post('http://192.168.1.21:8080/create-admin', {
+        axios.post(Constants.URL + Constants.API.LOGIN.CREATE_ADMIN, {
             "username": this.state.username,
             "password": this.state.password,
             "name": this.state.name,
@@ -98,31 +99,43 @@ class Register extends Component {
                                     <div className="register-label">
                                         <div className="col">
                                             <form className="from-register-input">
-                                                <p><label>Username</label>
+                                                <p>
+                                                    <label className="login-text">Username</label>
                                                     <input className="w3-input" type="text" id="username"
-                                                        value={this.state.username} onChange={(e) => { this.onChangeUsername(e) }} /></p>
+                                                        value={this.state.username}
+                                                        onChange={(e) => { this.onChangeUsername(e) }} />
+                                                </p>
                                             </form>
                                         </div>
                                         <div className="col">
                                             <form className="from-register-input">
-                                                <p><label>Password</label>
+                                                <p>
+                                                    <label className="login-text">Password</label>
                                                     <input className="w3-input" type="text" id="password"
-                                                        value={this.state.password} onChange={(e) => { this.onChangePassword(e) }} /></p>
+                                                        value={this.state.password}
+                                                        onChange={(e) => { this.onChangePassword(e) }} />
+                                                </p>
                                                 <h6>* password 5 ตัวขึ้นไป</h6>
                                             </form>
                                         </div>
                                         <div className="col">
                                             <form className="from-register-input">
-                                                <p><label>Name</label>
+                                                <p>
+                                                    <label className="login-text">Name</label>
                                                     <input className="w3-input" type="text" id="password"
-                                                        value={this.state.name} onChange={(e) => { this.onChangeName(e) }} /></p>
+                                                        value={this.state.name}
+                                                        onChange={(e) => { this.onChangeName(e) }} />
+                                                </p>
                                             </form>
                                         </div>
                                         <div className="col">
                                             <form className="from-register-input">
-                                                <p><label>Position</label>
+                                                <p>
+                                                    <label className="login-text">Position</label>
                                                     <input className="w3-input" type="text" id="password"
-                                                        value={this.state.position} onChange={(e) => { this.onChangePosition(e) }} /></p>
+                                                        value={this.state.position}
+                                                        onChange={(e) => { this.onChangePosition(e) }} />
+                                                </p>
                                             </form>
                                         </div>
                                     </div>

@@ -1,17 +1,17 @@
 .from-menu {
     color: white;
     font-family: "Chivo Mono", monospace;
+    background-color: #000814;
 }
 .select-style {
     margin-top: 40px;
     margin-left: 8px
 }
-
-/* .list-item {
-    color: white;
-} */
 .list-item:hover {
     background-color: #FFE5A6;
+}
+.col-list-menu {
+    width: 180px;
 }
 .from-listMenu {
     margin-top: 50px;
@@ -20,6 +20,17 @@
 .btn-card {
     background-color: #00081400;
     border-style: none;
+}
+.card-body-menu {
+    background-color: white;
+    width: 150px;
+}
+.card-img-top {
+    width: 80px;
+    height: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -30px;
 }
 .card-list {
     /* display: none; */
@@ -73,16 +84,15 @@
     margin-left: auto;
     margin-right: auto;
 }
-.body-text {
+.body-text-title {
     display: table;
     margin-left: auto;
     margin-right: auto;
 }
-.body-text>h4 {
+.body-text-title>h4 {
     margin-top: 15px;
     font-size: 20px;
     font-family: 'Noto Serif Thai', serif;
-    display: flex;
 }
 .body-amount {
     display: table;

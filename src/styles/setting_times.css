@@ -1,0 +1,80 @@
+.form-setting-times {
+    margin-top: 20px;
+    margin-left: 10px;
+    font-family: "Chivo Mono", monospace;
+    background-color: #000814;
+    color: white;
+}
+.card-time-booking {
+    margin-top: 10px;
+    border: none;
+    width: 60vw;
+}
+.header-text {
+    font-family: "Chivo Mono", monospace;
+    font-weight: bold;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+.card-title-header {
+    font-family: "Chivo Mono", monospace;
+    font-weight: bold;
+}
+.card-time-booking > a {
+    text-decoration: none;
+    color: white;
+}
+.time-text {
+    font-family: "Chivo Mono", monospace;
+    font-weight: bold;
+}
+.from-time-input > label {
+    display: flex;
+    padding-left: 10px;
+}
+.from-time-input {
+    margin-top: 10px;
+    width: 90%;
+}
+input[type=text] {
+    color: white;
+    border: none;
+    border-bottom: 2px solid #f55536;
+    background-color: #00081400;
+}
+input[type=text]:hover {
+    border-bottom: 2px solid #ff773d;
+}
+.btn-confirm-time {
+    width: 60px;
+    background-color: #FFB703;
+    color: black;
+    text-decoration: none;
+    border: none;
+    font-weight: bold;
+    font-size: 10px;
+    font-family: "Chivo Mono", monospace;
+    margin-top: 10px;
+    font-family: "Chivo Mono", monospace;
+}
+.btn-confirm-time:hover {
+    background-color: #F8D273;
+    color: #f55536;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+}
+.btn-delete-time {
+    width: 60px;
+    background-color: #f55536;
+    color: black;
+    text-decoration: none;
+    border: none;
+    font-weight: bold;
+    font-size: 10px;
+    font-family: "Chivo Mono", monospace;
+    margin-top: 10px;
+    margin-left: 85%;
+}
+.btn-delete-time:hover {
+    background-color: #ff773d;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+}

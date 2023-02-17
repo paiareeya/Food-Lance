@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { NavLink } from "react-router-dom";
-
+import Constants from '../../constants';
 
 class AdminMenu extends Component {
 
@@ -19,8 +19,8 @@ class AdminMenu extends Component {
             showUpdateCategory: false,
             showFaill: false,
             showCategory: false,
-            checkbook: true,
-            name: '',
+            checkbox: false,
+            nameMenu: '',
             nameCategory: '',
             idCategory: '',
             price: '',
@@ -31,16 +31,7 @@ class AdminMenu extends Component {
             listMenu: [],
             categoryTrue: [],
             menucatagory: '',
-            dropdown: [
-                {
-                    id: 1,
-                    name: 'ผลไม้'
-                },
-                {
-                    id: 2,
-                    name: 'หมู'
-                }
-            ]
+            DeleteMemu: []
         }
     }
 
@@ -49,14 +40,6 @@ class AdminMenu extends Component {
     }
 
     handleClose = () => {
-        const payload =
-        {
-            "data": this.state.categoryTrue
-        }
-        console.log(payload);
-        axios.post('http://192.168.1.21:8080/update-category', payload).then(response => {
-            this.GetCategory()
-        });
         this.setState({
             show: false,
             showAddCategory: false,
@@ -74,14 +57,11 @@ class AdminMenu extends Component {
         this.setState({ showAddCategory: true });
     }
     handleUpdateCategory = () => {
-        this.setState({
-            // showUpdateCategory: true,
-            showCategory: true
-        });
+        this.setState({ showCategory: true });
     }
 
     onChangeName = (e) => {
-        this.setState({ name: e.target.value })
+        this.setState({ nameMenu: e.target.value })
     }
     onChangePrice = (e) => {
         this.setState({ price: e.target.value })
@@ -103,55 +83,68 @@ class AdminMenu extends Component {
     }
 
     onClickMenu = () => {
-        // console.log(items);
-        axios.post('http://192.168.1.21:8080/create-menu', {
-            "title": this.state.name,
+        const nameSendC = this.state.listCategory
+        const idSendC = this.state.category
+        const result = nameSendC.filter(item => item.category_id === idSendC);
+        if (idSendC === " ") {
+            return
+        }
+        // console.log(Constants.URL + Constants.API.MENUS.CREATE_MENU);
+        axios.post(Constants.URL + Constants.API.MENUS.CREATE_MENU, {
+            "title": this.state.nameMenu,
             "price": this.state.price,
-            "status": true,
-            "category": this.state.category,
+            "status": false,
+            "category_id": this.state.category,
+            "category": result[0].category_name,
             "inform": this.state.detail
         }).then(response => {
-            // console.log(response.data);
-        });
-    }
-
-    onClickCategoryMenu = (name) => {
-        console.log("name", name);
-        axios.post('http://192.168.1.21:8080/category-menu', {
-            "category_id": name.category_id
-        }).then(response => {
+            console.log(response.data);
+            this.handleClose();
+            this.GetCategory()
             this.setState({
-                listMenu: response.data
+                nameMenu: '',
+                price: '',
+                category: '',
+                detail: '',
             })
         });
     }
 
-    onClickCheckBoxCategory = (index) => {
-        const listC = this.state.categoryTrue
-        const getlist = this.state.listCategory
-        listC[index].status = !listC[index].status
-        this.setState({
-            categoryTrue: listC,
-            listCategory: getlist
-        })
-        console.log(this.state.listCategory);
+    onClickCategoryMenu = (name) => {
+        // console.log("name", name);
+        axios.post(Constants.URL + Constants.API.MENUS.CATEGORY_MENU, {
+            "category_id": name.category_id
+        }).then(response => {
+            const listresponse = response.data.map(
+                (item) => {
+                    return {
+                        ...item,
+                        boxStatus: false
+                    }
+                }
+            )
+            this.setState({
+                listMenu: listresponse
+            })
+        });
     }
 
     GetCategory = () => {
-        axios.post('http://192.168.1.21:8080/find-category')
+        axios.post(Constants.URL + Constants.API.CATEGORY.FIND_CATEGORY,)
             .then(response => {
                 console.log(response.data);
+                const showC = response.data
+                const result = showC.filter(item => item.status === true);
                 this.setState({
                     listCategory: response.data,
                     categoryTrue: response.data
                 })
-                this.onClickCategoryMenu(response.data[0]);
+                this.onClickCategoryMenu(result[0]);
             });
     }
 
-
     onClickAddCategory = () => {
-        axios.post('http://192.168.1.21:8080/create-category', {
+        axios.post(Constants.URL + Constants.API.CATEGORY.CREATE_CATEGORY, {
             "category_id": this.state.idCategory,
             "category_name": this.state.nameCategory
         }).then(response => {
@@ -173,6 +166,59 @@ class AdminMenu extends Component {
 
         });
     }
+    onClickCheckBoxCategory = (index) => {
+        console.log(index);
+        const listC = this.state.categoryTrue
+        console.log(listC);
+        const item = listC[index]
+        const status = !item.status
+        listC[index] = {
+            ...item,
+            status
+        }
+
+        this.setState({
+            categoryTrue: listC,
+        })
+
+    }
+    UploadCategory = () => {
+        const payload =
+        {
+            "data": this.state.categoryTrue
+        }
+        console.log(payload);
+        axios.post(Constants.URL + Constants.API.CATEGORY.UPDATE_CATEGORY, payload)
+            .then(response => {
+                this.GetCategory()
+                this.handleClose();
+            });
+    }
+
+    onClickCheckBoxMenu = (index) => {
+        const getListMenu = this.state.listMenu
+        const item = getListMenu[index]
+        const MenuStatus = !item.boxStatus
+        getListMenu[index] = {
+            ...item,
+            boxStatus: MenuStatus
+        }
+        this.setState({
+            listMenu: getListMenu
+        })
+    }
+    onClickCheckDeleteMenu = () => {
+        const getMenu = this.state.listMenu.filter(item => item.boxStatus === true);
+        const payload =
+        {
+            "data": getMenu
+        }
+        console.log("payload :", payload);
+        axios.post(Constants.URL + Constants.API.MENUS.DELETE_MENU, payload)
+            .then(response => {
+                this.GetCategory()
+            });
+    }
 
     render() {
         return (
@@ -189,7 +235,10 @@ class AdminMenu extends Component {
                                             onClick={() => { this.handleShow() }}>
                                             <b>Add</b>
                                         </button>
-                                        <button type="button" className="btn btn-delete"><b>Delete</b></button>
+                                        <button type="button" className="btn btn-delete"
+                                            onClick={() => { this.onClickCheckDeleteMenu() }}>
+                                            <b>Delete</b>
+                                        </button>
                                     </div>
                                     <div className="col admin-left-body">
                                         <div className="row row-cols-1 row-cols-md-4 g-4">
@@ -200,9 +249,10 @@ class AdminMenu extends Component {
                                                         <div className="card-body" >
                                                             <h3 className="card-title-name">{item.title}</h3>
                                                             <label className="card-text-menu">หมวดหมู่: <b>{item.category}</b></label>
-                                                            <input className="form-check-input me-1 checkbox-menu" type="checkbox" value="" />
+                                                            <input className="form-check-input me-1 checkbox-menu" type="checkbox" value=""
+                                                                onChange={() => { this.onClickCheckBoxMenu(i) }} checked={item.boxStatus} />
                                                         </div>
-                                                    </div>
+                                                    </div><br />
                                                 </div>
                                             )}
                                         </div>
@@ -228,7 +278,7 @@ class AdminMenu extends Component {
                                                                     <form className="from-category-input">
                                                                         <label>Name</label>
                                                                         <input className="w3-input" type="text" id="name"
-                                                                            value={this.state.name}
+                                                                            value={this.state.nameMenu}
                                                                             onChange={(e) => { this.onChangeName(e) }} />
                                                                     </form>
                                                                 </div>
@@ -249,11 +299,15 @@ class AdminMenu extends Component {
                                                                     <div className="select-style-admin">
                                                                         <select value={this.state.category}
                                                                             onChange={(e) => { this.onChangeCategory(e) }} >
-                                                                            {this.state.dropdown.map((val, i) => (
-                                                                                <option id="dr" key={'brand' + i} value={val.name}>
-                                                                                    {val.name}
-                                                                                </option>
-                                                                            ))}
+                                                                            <option id="dr" value={' '}>
+                                                                                เลือก
+                                                                            </option>
+                                                                            {this.state.listCategory.map((item, i) =>
+                                                                                item.status && (
+                                                                                    <option id="dr" key={'category' + i} value={item.category_id} >
+                                                                                        {item.category_name}
+                                                                                    </option>
+                                                                                ))}
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -395,7 +449,7 @@ class AdminMenu extends Component {
                                                 </Modal.Body>
                                                 <Modal.Footer className="from-popup-style">
                                                     <Button className="btn-footer" variant="primary"
-                                                        onClick={() => { this.handleClose() }}>
+                                                        onClick={() => { this.UploadCategory() }}>
                                                         ตกลง
                                                     </Button>
                                                 </Modal.Footer>

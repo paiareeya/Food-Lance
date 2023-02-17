@@ -15,7 +15,12 @@
 .teble-menu > .link-menu:hover {
     color: white;
 }
-
+.dropdown-bk {
+    display: block;
+}
+/* .dropdown-bk > button {
+    background-color: #00000000;
+} */
 .link-menu > p {
     display: flex;
     font-size: 13px;
@@ -44,4 +49,48 @@
 } 
 .label-menu {
     margin-left: 10px;
+    font-family: "Chivo Mono", monospace;
 }
+.teble-menu > button {
+    color: white;
+    text-decoration: none;
+    width: 10vw;
+    height: 45px;
+    border-radius: 5px;
+    margin-top: 10px;
+    background-color: #00000000;
+}
+.teble-menu > button:hover {
+    color: white;
+    background-color: #ffb238;
+}
+.active-bk {
+    color: white;
+    text-decoration: none;
+    background-color: #FFB703;
+    border-radius: 5px;
+    width: 160px;
+} 
+.card-body-Dropdown {
+    background-color: #F8D273;
+}
+.card-body > .link-Dropdown {
+    color: black;
+    width: 140px;
+    height: 40px;
+    border-radius: 5px;
+    display: flex;
+    font-size: 13px;
+    font-weight: bold;
+}
+.card-body > .link-Dropdown:hover {
+    color: white;
+    background-color: #ffb238;
+}
+.card-body > .active-Dropdown {
+    color: #f55536;
+    background-color: #FFE5A6;
+    border-radius: 5px;
+    width: 140px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+} 

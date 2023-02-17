@@ -10,7 +10,7 @@ p > b {
     font-family: 'Noto Serif Thai', serif;
 }
 .from-booking-input {
-    margin-top: 40px;
+    margin-top: 20px;
     width: 70%;
 }
 .from-booking-btn {
@@ -27,9 +27,13 @@ p > b {
 .booking-btn:hover {
     background-color: #F8D273;
 } 
-/* .select-header {
-    
-} */
+.dropdown {
+    display: flex;
+}
+.cun {
+    margin-top: 40px;
+    margin-left: 10px;
+}
 .select-header {
     font-family: 'Noto Serif Thai', serif;
     font-size: 15px;
@@ -77,3 +81,36 @@ p > b {
 #dr {
     background-color: #F8D273;
 } 
+.from-popup-success {
+    margin-top: 160px;
+}
+.from-popup-style-success {
+    background-color: #FFB703;
+    border-radius: 5px;
+    border-style: none;
+    width: 500px;
+    height: 200px;
+    font-family: 'Noto Serif Thai', serif;
+}
+.body-text-success {
+    display: flow-root;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.from-popup-booking-faill {
+    margin-top: 160px;
+}
+.from-popup-style-booking-faill {
+    background-color: #FFB703;
+    border-radius: 5px;
+    border-style: none;
+    width: 500px;
+    height: 200px;
+    font-family: 'Noto Serif Thai', serif;
+}
+.body-text-booking-faill {
+    display: flow-root;
+    margin-left: auto;
+    margin-right: auto;
+}

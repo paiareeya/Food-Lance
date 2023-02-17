@@ -3,10 +3,20 @@
     margin-left: 10px;
     font-family: "Chivo Mono", monospace;
     background-color: #000814;
+    color: white;
 }
-.from-admin-booking-right {
+.from-admin-booking-center {
     display: flex;
     margin-top: 20px;
+    margin-left: 30px;
+}
+.dropdown-booking {
+    margin-left: 30px;
+    display: flex;
+}
+.cun-bk {
+    margin-top: 3px;
+    margin-left: 10px;
 }
 .select-style-admin-booking {
     width: 150px;
@@ -56,20 +66,36 @@
 } */
 .booking-name {
     font-family: 'Noto Serif Thai', serif;
+    display: flex;
+}
+.text-name, .text-phone, .text-time, .text-cus {
+    margin-left: 10px;
 }
 .booking-phone {
     font-family: 'Noto Serif Thai', serif;
     margin-top: 10px;
+    display: flex;
 }
 .booking-time {
     font-family: 'Noto Serif Thai', serif;
     margin-top: 10px;
+    display: flex;
 }
-
+.text-booking-time {
+    display: flex;
+}
+.text-booking-status {
+    font-family: 'Noto Serif Thai', serif;
+    display: flex;
+}
 .booking-amount-cus {
     font-family: 'Noto Serif Thai', serif;
     margin-top: 10px;
-    width: 30%;
+    width: 40%;
+    display: flex;
+}
+.from-amount-cus-input {
+    display: flex;
 }
 .from-amount-cus-input > input[type=text] {
     color: white;
@@ -80,12 +106,21 @@
 .from-amount-cus-input > input[type=text]:hover {
     border-bottom: 2px solid #ff773d;
 }
-#amount-cus, #checkin  {
+#amount-cus  {
     height: 30px;
 }
-
 .booking-checkIn {
     font-family: 'Noto Serif Thai', serif;
+    margin-top: 10px;
+    width: 140%;
+}
+#appt {
+    width: 115px;
+    height: 25px;
+    background-color: #FFB703;
+    border: none;
+    border-radius: 5px;
+    padding-left: 10px;
     margin-top: 10px;
 }
 .booking-status {
@@ -104,4 +139,77 @@
 .from-checkIn-input > input[type=text]:hover {
     border-bottom: 2px solid #ff773d;
 }
+.booking-btn-footer {
+    margin-top: 10px;
+}
+.btn-footer-booking {
+    background-color: #f55536;
+    border-style: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    font-family: 'Noto Serif Thai', serif;
+}
+.btn-footer-booking:hover {
+    background-color: #ff773d;
+}
+.from-admin-booking-right {
+    margin-top: 110px;
+}
+.card-booking {
+    border: none;
+    width: 200px;
+    margin-top: 20px;
+}
+.header-booking {
+    background-color: #023047;
+    padding-top: 13px;
+}
+.btn-add-booking {
+    margin-left: 20px;
+    background-color: #FFB703;
+    font-family: "Chivo Mono", monospace;
+}
+.btn-add-booking:hover {
+    color: #99582a;
+    background-color: #ffb238;
+}
+.btn-add-booking > b {
+    font-family: "Chivo Mono", monospace;
+}
+
+.btn-delete-booking {
+    color: white;
+    background-color: #31572c;
+}
+.btn-delete-booking:hover {
+    color: #ecf39e;
+    background-color: #132a13;
+}
+.from-popup-booking-Update {
+    margin-top: 160px;
+}
+.from-popup-style-booking-Update {
+    background-color: #FFB703;
+    border-radius: 5px;
+    border-style: none;
+    width: 500px;
+    height: 200px;
+    font-family: 'Noto Serif Thai', serif;
+}
+.body-text-booking-Update {
+    display: grid;
+    margin-left: auto;
+    margin-right: auto;
+}
+.icon-faCircleCheck-booking {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    color: #31572c;
+}
+/* .body-booking {
+    display: flex;
+} */
+
 

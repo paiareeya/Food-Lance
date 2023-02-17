@@ -1,0 +1,40 @@
+.form-admin-walkIn {
+    margin-top: 20px;
+    margin-left: 10px;
+    font-family: "Chivo Mono", monospace;
+    background-color: #000814;
+    color: white;
+}
+.select-style-walkIn {
+    margin-top: 2px;
+    font-size: 15px;
+    font-family: "Chivo Mono", monospace;
+    font-weight: bold;
+}
+.select-style-walkIn > b {
+    font-family: "Chivo Mono", monospace;
+}
+.text-booking {
+    font-family: 'Noto Serif Thai', serif;
+}
+.btn-walkIn {
+    height: 30px;
+    /* margin-left: 20px; */
+    background-color: #FFB703;
+}
+.btn-walkIn:hover {
+    color: #99582a;
+    background-color: #ffb238;
+}
+.icon-faCircleCheck-Walk {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    color: #31572c;
+}
+.CircleExclamation {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    color: #99582a;
+}

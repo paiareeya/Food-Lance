@@ -4,7 +4,7 @@
     font-family: "Chivo Mono", monospace;
     text-align: center;
 }
-h1 {
+h1, .label-home > p, .link-booking > p {
     font-family: "Chivo Mono", monospace;
 }
 .card-body>p {
@@ -21,14 +21,18 @@ h1 {
 .btn-danger {
     width: 130px;
 }
+.from-slid {
+    margin-top: 30px;
+}
 .from-category {
-    margin-top: 200px;
+    margin-top: 110px;
 }
 .group {
     width: 200px;
     height: 50px;
     border-radius: 30px;
     background-color: #2d2f32d4;
+    box-shadow: 0 4px 8px 0 rgba(46, 46, 46, 0.2), 0 3px 10px 0 rgba(46, 46, 46, 0.19);
 }
 
 .register-back {
@@ -55,4 +59,10 @@ h1 {
 }
 .btn-booking > .link-booking:hover {
     background-color: #ff773d;
+}
+.slide-image {
+    margin-left: auto;
+    margin-right: auto;
+    width: 350px;
+    height: 350px;
 }

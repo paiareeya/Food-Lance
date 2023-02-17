@@ -18,6 +18,9 @@
     color: #99582a;
     background-color: #ffb238;
 }
+.btn-add > b, .btn-delete > b  {
+    font-family: "Chivo Mono", monospace;
+}
 .btn-delete {
     margin-left: 10px;
     background-color: #FE5244;
@@ -185,6 +188,7 @@
 }
 .header-category {
     background-color: #023047;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
 }
 .list-group {
     border: none;
@@ -201,6 +205,9 @@
 .btn-add-category:hover {
     color: #99582a;
     background-color: #ffb238;
+}
+.btn-add-category > b, .btn-update-category > b {
+    font-family: "Chivo Mono", monospace;
 }
 .btn-update-category {
     margin-right: 40px;
