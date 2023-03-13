@@ -27,10 +27,10 @@ function App() {
         <Routes>
           <Route path='/' element={<LayoutNavbar />}>
             <Route index element={<Home />} />
-            <Route path='menu' element={<Menu />} />
+            {/* <Route path='menu' element={<Menu />} /> */}
             <Route path='booking' element={<Booking />} />
             <Route path='about' element={<About />} />
-            <Route path='basket' element={<Basket />} />
+            {/* <Route path='basket' element={<Basket />} /> */}
             <Route path='login' element={<Login />} />
             <Route path='register' element={<Register />} />
             <Route path='admin' element={<Admin />} />
@@ -42,6 +42,9 @@ function App() {
             <Route path='select-booking' element={<SelectBooking />} />
             <Route path='setting-times' element={<SettingTime />} />
           </Route>
+
+          <Route path='menu' element={<Menu />} />
+          <Route path='basket' element={<Basket />} />
         </Routes>
       </BrowserRouter>
     </div>

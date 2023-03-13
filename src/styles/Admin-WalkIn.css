@@ -5,36 +5,160 @@
     background-color: #000814;
     color: white;
 }
+
 .select-style-walkIn {
     margin-top: 2px;
     font-size: 15px;
     font-family: "Chivo Mono", monospace;
     font-weight: bold;
 }
-.select-style-walkIn > b {
+
+.select-style-walkIn>b {
     font-family: "Chivo Mono", monospace;
 }
+
 .text-booking {
     font-family: 'Noto Serif Thai', serif;
 }
+
 .btn-walkIn {
     height: 30px;
     /* margin-left: 20px; */
     background-color: #FFB703;
 }
+
 .btn-walkIn:hover {
     color: #99582a;
     background-color: #ffb238;
 }
+
 .icon-faCircleCheck-Walk {
     display: flex;
     margin-left: auto;
     margin-right: auto;
     color: #31572c;
 }
+
 .CircleExclamation {
     display: flex;
     margin-left: auto;
     margin-right: auto;
     color: #99582a;
+}
+
+.from-popup-booking-qr {
+    margin-top: 160px;
+}
+
+.text-walkIn {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.li-image-qr {
+    margin-top: 2vh;
+    margin-left: auto;
+    margin-right: auto;
+    width: 10vw;
+    height: 20vh;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.text-qr {
+    width: 10vw;
+    height: 20vh;
+    margin-top: 2vh;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #7272728c;
+    color: rgba(255, 255, 255, 0.853);
+    border-radius: 10px;
+}
+
+.text-qr>p {
+    margin-top: 8vh;
+    font-family: "Chivo Mono", monospace;
+}
+
+.from-popup-style-booking-qr {
+    border-radius: 5px;
+    border-style: none;
+    font-family: 'Noto Serif Thai', serif;
+}
+
+.from-popup-style-qr {
+    border-radius: 5px;
+    border-style: none;
+    width: 500px;
+    font-family: 'Noto Serif Thai', serif;
+}
+
+.body-text-booking-qr {
+    display: flow-root;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.from-popup-walkIn {
+    width: 40vw;
+    height: auto;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.from-popup-style-walkIn {
+    background-color: #FFB703;
+    border-radius: 5px;
+    border-style: none;
+    font-family: 'Noto Serif Thai', serif;
+}
+
+.body-text-success {
+    display: grid;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* .from-popup-style-walkIn {
+    border-radius: 5px;
+    border-style: none;
+    font-family: 'Noto Serif Thai', serif;
+} */
+
+.btn-footer-booking {
+    background-color: #f55536;
+    border-style: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    font-family: 'Noto Serif Thai', serif;
+}
+
+.btn-footer-booking:hover {
+    background-color: #ff773d;
+}
+
+.btn-footer-booking:focus {
+    background-color: #f55536;
+    border-style: none;
+    box-shadow: 0 0 0 2px #f55536;
+}
+
+.download_qr {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15px;
+    font-family: "Chivo Mono", monospace;
+    text-decoration: none;
+    color: black;
+}
+
+.download_qr:hover {
+    color: #f55536;
 }

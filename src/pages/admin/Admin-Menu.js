@@ -1,12 +1,13 @@
 import { Component } from "react";
 import '../../styles/Admin-Menu.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faCarrot } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faUpload } from '@fortawesome/free-solid-svg-icons'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { NavLink } from "react-router-dom";
 import Constants from '../../constants';
+import loadImage from 'blueimp-load-image'
 
 class AdminMenu extends Component {
 
@@ -27,12 +28,26 @@ class AdminMenu extends Component {
             category: '',
             image: 'images',
             detail: '',
+            file: '',
             listCategory: [],
             listMenu: [],
             categoryTrue: [],
             menucatagory: '',
-            DeleteMemu: []
+            DeleteMemu: [],
+            imgMenuName: '',
+            imgMenu: '',
+            imgMenuWidth: 256,
+            imgMenuHeight: 256,
+            isShowImg: false,
+            pathImgData: [],
+            dataImg: '',
+            dataImgName: ''
         }
+
+        this.IMAGE_MAX_WIDTH = '100'
+        this.IMAGE_MAX_HEIGHT = '100'
+        this.IMAGE_MIN_WIDTH = '100'
+        this.IMAGE_MIN_HEIGHT = '100'
     }
 
     componentDidMount() {
@@ -44,7 +59,8 @@ class AdminMenu extends Component {
             show: false,
             showAddCategory: false,
             showUpdateCategory: false,
-            showCategory: false
+            showCategory: false,
+            imgMenusta: '',
         });
     }
     handleCloseFaill = () => {
@@ -81,6 +97,10 @@ class AdminMenu extends Component {
     onChangeMenuCategory = (e) => {
         this.setState({ menucatagory: e.target.value })
     }
+    handleChangeImage = (e) => {
+        console.log(e.target.files);
+        this.setState({ file: URL.createObjectURL(e.target.files[0]) });
+    }
 
     onClickMenu = () => {
         const nameSendC = this.state.listCategory
@@ -89,19 +109,36 @@ class AdminMenu extends Component {
         if (idSendC === " ") {
             return
         }
-        // console.log(Constants.URL + Constants.API.MENUS.CREATE_MENU);
+        console.log("1 this.state.dataImg", this.state.imgMenu);
+        console.log("1 this.state.dataImgName", this.state.imgMenuName);
+
+        let img = ''
+        let imgName = ''
+
+        if (!this.state.imgMenu && !this.state.imgMenuName) {
+            this.setState({
+                img,
+                imgName
+            })
+        } else {
+            img = this.state.imgMenu
+            imgName = this.state.imgMenuName
+        }
         axios.post(Constants.URL + Constants.API.MENUS.CREATE_MENU, {
             "title": this.state.nameMenu,
             "price": this.state.price,
             "status": false,
             "category_id": this.state.category,
             "category": result[0].category_name,
-            "inform": this.state.detail
+            "inform": this.state.detail,
+            "imgName": imgName,
+            "pathImage": img
         }).then(response => {
             console.log(response.data);
             this.handleClose();
             this.GetCategory()
             this.setState({
+                file: '',
                 nameMenu: '',
                 price: '',
                 category: '',
@@ -115,6 +152,7 @@ class AdminMenu extends Component {
         axios.post(Constants.URL + Constants.API.MENUS.CATEGORY_MENU, {
             "category_id": name.category_id
         }).then(response => {
+            console.log("response.data", response.data);
             const listresponse = response.data.map(
                 (item) => {
                     return {
@@ -220,7 +258,69 @@ class AdminMenu extends Component {
             });
     }
 
+    handleBrowseFile = eventTarget => {
+        console.log(eventTarget.name)
+        if (eventTarget.files[0]) {
+            const options = {
+                maxWidth: this.IMAGE_MAX_WIDTH,
+                maxHeight: this.IMAGE_MAX_HEIGHT,
+                minWidth: this.IMAGE_MIN_WIDTH,
+                minHeight: this.IMAGE_MIN_HEIGHT,
+                orientation: true,
+                canvas: true
+            }
+            if (eventTarget.files[0]) {
+                loadImage(
+                    eventTarget.files[0],
+                    canvas => {
+
+                        switch (eventTarget.name) {
+                            case 'imgMenuValue':
+                                this.setState({
+                                    imgMenu: canvas.toDataURL('image/jpeg', 0.8),
+                                    imgMenuName: eventTarget.files[0].name
+                                })
+                                break
+                            default:
+                                break
+                        }
+                        // console.log(`this.portInCardImage: `, this.portInCardImage)
+                    },
+                    options
+                )
+            }
+        }
+    }
+
+    handleImageRatio = e => {
+        const imgId = e.target.id
+        let width = e.target.naturalWidth
+        let height = e.target.naturalHeight
+        let ratio = 1
+
+        if (width > height && width > this.imageWidth) {
+            // Horizontal
+            ratio = height / width
+            width = this.imageWidth
+            height = this.imageWidth * ratio
+        } else if (width < height && height > this.imageHeight) {
+            // Vertical
+            ratio = width / height
+            width = this.imageHeight * ratio
+            height = this.imageHeight
+        }
+
+        if (imgId === 'imgMenuDetail') {
+            this.setState({
+                imgMenuWidth: width,
+                imgMenuHeight: height
+            })
+        }
+    }
+
+
     render() {
+        // console.log(this.state.imgMenuName);
         return (
             <div className="from-admin-menu">
                 <div className="container">
@@ -229,8 +329,8 @@ class AdminMenu extends Component {
                             <div className="admin-left">
                                 <div className="row row-cols-1">
                                     <div className="col admin-left-header">
-                                        <input className="input-saerch" type="text" placeholder="Search.." />
-                                        {' '}<FontAwesomeIcon icon={faMagnifyingGlass}></FontAwesomeIcon>
+                                        {/* <input className="input-saerch" type="text" placeholder="Search.." /> */}
+                                        {/* {' '}<FontAwesomeIcon icon={faMagnifyingGlass}></FontAwesomeIcon> */}
                                         <button type="button" className="btn btn-add"
                                             onClick={() => { this.handleShow() }}>
                                             <b>Add</b>
@@ -244,11 +344,26 @@ class AdminMenu extends Component {
                                         <div className="row row-cols-1 row-cols-md-4 g-4">
                                             {this.state.listMenu.map((item, i) =>
                                                 <div className="col" key={'menu' + i}>
-                                                    <div className="card card-body-menu">
-                                                        <img src="https://th.bing.com/th/id/R.3d608319942ed6b4c98ac1bcbebc7076?rik=epwmnQcoUkuGgw&pid=ImgRaw&r=0" className="card-img-top" />
+                                                    <div className="card card-body-menu-store">
+                                                        {item.pathImage ?
+                                                            (<>
+                                                                <img
+                                                                    key={item._id}
+                                                                    id="imgMenuDetail"
+                                                                    src={item.pathImage}
+                                                                    onLoad={this.handleImageRatio}
+                                                                    alt="img menu"
+                                                                    className="card-img-top"
+                                                                />
+                                                            </>) :
+                                                            null
+                                                        }
+
                                                         <div className="card-body" >
                                                             <h3 className="card-title-name">{item.title}</h3>
-                                                            <label className="card-text-menu">หมวดหมู่: <b>{item.category}</b></label>
+                                                            <label className="card-text-menu">หมวดหมู่:
+                                                                <b style={{ fontFamily: 'Noto Serif Thai' }}>{item.category}</b>
+                                                            </label>
                                                             <input className="form-check-input me-1 checkbox-menu" type="checkbox" value=""
                                                                 onChange={() => { this.onClickCheckBoxMenu(i) }} checked={item.boxStatus} />
                                                         </div>
@@ -260,7 +375,7 @@ class AdminMenu extends Component {
                                     <Modal className="from-popup-category" show={this.state.show} onHide={() => { this.handleClose() }}>
                                         <div className="from-popup-style">
                                             <Modal.Header closeButton className="from-popup-style">
-                                                <Modal.Title><b>เพิ่มเมนู</b></Modal.Title>
+                                                <Modal.Title><b style={{ fontFamily: 'Noto Serif Thai' }}>เพิ่มเมนู</b></Modal.Title>
                                             </Modal.Header>
                                             <Modal.Body className="from-popup-style">
                                                 <div className="popup-body-category">
@@ -268,34 +383,58 @@ class AdminMenu extends Component {
                                                         <div className="row row-cols-1">
                                                             <div className="col">
                                                                 <div className="body-image">
-                                                                    <img src="https://th.bing.com/th/id/R.3d608319942ed6b4c98ac1bcbebc7076?rik=epwmnQcoUkuGgw&pid=ImgRaw&r=0"
-                                                                        className="card-img-top" value={this.state.image} />
-                                                                    {/* <FontAwesomeIcon className="list-icon" icon={faCarrot}></FontAwesomeIcon> */}
+                                                                    <div className="body-image">
+                                                                        {this.state.imgMenu ?
+                                                                            (<img
+                                                                                className="card-img-top"
+                                                                                id="imgMenuValue"
+                                                                                src={this.state.imgMenu}
+                                                                                onLoad={this.handleImageRatio}
+                                                                                width={this.state.imgMenuWidth}
+                                                                                height={this.state.imgMenuHeight}
+                                                                            />) : (
+                                                                                'NO IMAGE'
+                                                                            )}
+                                                                        <label htmlFor="image" className="upload-icon">
+                                                                            <FontAwesomeIcon icon={faUpload} style={{ fontSize: '20px' }}></FontAwesomeIcon>
+                                                                        </label>
+                                                                        <input
+                                                                            type="file"
+                                                                            id="image"
+                                                                            name="imgMenuValue"
+                                                                            accept={'.jpg,.jpeg,.png'}
+                                                                            onChange={e => this.handleBrowseFile(e.target)}
+                                                                            style={{ display: 'none' }}
+                                                                        />
+
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div className="col">
-                                                                <div className="body-text">
+                                                                <div className="body-text-add">
                                                                     <form className="from-category-input">
-                                                                        <label>Name</label>
+                                                                        <label>Name:</label>
                                                                         <input className="w3-input" type="text" id="name"
                                                                             value={this.state.nameMenu}
-                                                                            onChange={(e) => { this.onChangeName(e) }} />
+                                                                            onChange={(e) => { this.onChangeName(e) }}
+                                                                            style={{ fontFamily: 'Noto Serif Thai' }} />
                                                                     </form>
                                                                 </div>
                                                             </div>
                                                             <div className="col">
-                                                                <div className="body-text">
+                                                                <div className="body-text-add">
                                                                     <form className="from-category-input">
-                                                                        <label>Price</label>
+                                                                        <label>Price:</label>
                                                                         <input className="w3-input" type="text" id="price"
                                                                             value={this.state.price}
-                                                                            onChange={(e) => { this.onChangePrice(e) }} />
+                                                                            onChange={(e) => { this.onChangePrice(e) }}
+                                                                            style={{ fontFamily: 'Chivo Mono' }} />
                                                                     </form>
                                                                 </div>
                                                             </div>
                                                             <div className="col">
-                                                                <div className="body-text">
-                                                                    <label>Category</label>
+                                                                <div className="body-text-add" style={{ marginTop: '15px' }}>
+                                                                    <label>Category:</label>
                                                                     <div className="select-style-admin">
                                                                         <select value={this.state.category}
                                                                             onChange={(e) => { this.onChangeCategory(e) }} >
@@ -304,7 +443,7 @@ class AdminMenu extends Component {
                                                                             </option>
                                                                             {this.state.listCategory.map((item, i) =>
                                                                                 item.status && (
-                                                                                    <option id="dr" key={'category' + i} value={item.category_id} >
+                                                                                    <option id="dr" key={'category' + i} value={item.category_id} style={{ color: '#000814', fontFamily: 'Noto Serif Thai' }} >
                                                                                         {item.category_name}
                                                                                     </option>
                                                                                 ))}
@@ -313,12 +452,13 @@ class AdminMenu extends Component {
                                                                 </div>
                                                             </div>
                                                             <div className="col">
-                                                                <div className="body-text">
+                                                                <div className="body-text-add">
                                                                     <form className="from-category-input">
-                                                                        <label>detail</label>
+                                                                        <label>Detail:</label>
                                                                         <input className="w3-input" type="text" id="detail"
                                                                             value={this.state.detail}
-                                                                            onChange={(e) => { this.onChangeDetail(e) }} />
+                                                                            onChange={(e) => { this.onChangeDetail(e) }}
+                                                                            style={{ fontFamily: 'Noto Serif Thai' }} />
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -355,7 +495,7 @@ class AdminMenu extends Component {
                                                                 <li className="list-group-item"
                                                                     key={'category' + i}
                                                                     onClick={() => { this.onClickCategoryMenu(item) }}>
-                                                                    <span>
+                                                                    <span style={{ fontFamily: 'Noto Serif Thai' }}>
                                                                         {item.category_name}
                                                                     </span>
                                                                 </li>
@@ -386,7 +526,7 @@ class AdminMenu extends Component {
                                         <Modal className="from-popup-add-category" show={this.state.showAddCategory} onHide={() => { this.handleClose() }}>
                                             <div className="from-popup-style-add">
                                                 <Modal.Header closeButton className="from-popup-style-add">
-                                                    <Modal.Title><b>เพิ่มหมวดหมู่</b></Modal.Title>
+                                                    <Modal.Title><b style={{ fontFamily: 'Noto Serif Thai' }}>เพิ่มหมวดหมู่</b></Modal.Title>
                                                 </Modal.Header>
                                                 <Modal.Body className="from-popup-style">
                                                     <div className="popup-body-category">
@@ -395,7 +535,7 @@ class AdminMenu extends Component {
                                                                 <div className="col">
                                                                     <div className="body-text-add">
                                                                         <form className="from-add-category-input">
-                                                                            <label>Id</label>
+                                                                            <label>Id:</label>
                                                                             <input className="w3-input" type="text" id="id"
                                                                                 value={this.state.idCategory}
                                                                                 onChange={(e) => { this.onChangeAddIdCategory(e) }} />
@@ -405,7 +545,7 @@ class AdminMenu extends Component {
                                                                 <div className="col">
                                                                     <div className="body-text-add">
                                                                         <form className="from-add-category-input">
-                                                                            <label>Name</label>
+                                                                            <label>Name:</label>
                                                                             <input className="w3-input" type="text" id="name"
                                                                                 value={this.state.nameCategory}
                                                                                 onChange={(e) => { this.onChangeAddNameCategory(e) }} />
@@ -480,8 +620,8 @@ class AdminMenu extends Component {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div >
+            </div >
         )
     }
 }

@@ -4,9 +4,12 @@
     background-color: #000814;
     color: white;
 }
+
 .about-image {
-    display: flex;
+    display: grid;
+    text-align: center;
 }
+
 .about-img {
     margin-left: auto;
     margin-right: auto;
@@ -14,27 +17,33 @@
     height: 350px;
     object-fit: cover;
 }
+
 .about-text {
     margin-top: auto;
     margin-bottom: auto;
 }
+
 .about-text-card {
     margin-top: 40px;
 }
+
 .about-card {
     width: 45px;
     height: 45px;
     background-color: #ffb803dc;
 }
+
 .about-card-body {
     text-align: center;
     display: flex;
     margin-top: auto;
     margin-bottom: auto;
 }
+
 .about-bottom {
-    margin-top: 30px;
+    margin-top: 40px;
 }
+
 .about-img-bottom {
     margin-top: 50px;
     width: 300px;
@@ -42,26 +51,32 @@
     object-fit: cover;
     transform: translate(0, -50%);
 }
+
 .card-contact-us {
     height: 50px;
     width: 180px;
     margin-top: 10px;
     background-color: #2d2f32d4;
 }
+
 .about-bottom-icon {
     display: flex;
 }
+
 .icon {
     width: 20px;
     height: 20px;
 }
-.about-bottom-icon > p {
+
+.about-bottom-icon>p {
     font-family: "Chivo Mono", monospace;
     color: #f55536;
 }
+
 .about-time {
-    display: flex;
+    display: grid;
 }
+
 .card-about-time {
     margin-top: 50px;
     width: 220px;
@@ -71,29 +86,41 @@
     position: absolute;
     transform: translate(120%, -50%);
 }
+
 .card-about-time-body {
     color: white;
     display: flex;
 }
+
 .about-time-header {
     display: flex;
 }
-.about-time-header > p {
+
+.about-time-header>p {
     font-size: 12px;
     color: white;
 }
+
 li {
     list-style: none;
 }
+
 .text-li {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 10px;
     color: white;
 }
-.text-li > span {
+
+.text-li>span {
     font-size: 10px;
 }
-.text-day-open, .about-text > p {
+
+.text-day-open,
+.about-text>p {
     font-family: "Chivo Mono", monospace;
+}
+
+.upload-icon-about-time {
+    margin-top: -5vh;
 }

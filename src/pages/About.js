@@ -3,10 +3,11 @@ import '../styles/About.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faIceCream, faWhiskeyGlass, faBowlFood, faShrimp, faClock,
-    fafacebook
+    faUpload
 } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import Constants from '../constants';
+import loadImage from 'blueimp-load-image'
 
 class About extends Component {
 
@@ -17,6 +18,15 @@ class About extends Component {
             phone: '',
             facebook: '',
             line: '',
+            imgAbout_1: '',
+            imgAbout_1Name: '',
+            imgAbout_2: '',
+            imgAbout_2Name: '',
+            imgAboutWidth: 256,
+            imgAboutHeight: 256,
+            dataImg: '',
+            dataImgName: '',
+            pathImgData: [],
             data_store: [],
             time: [
                 {
@@ -64,6 +74,11 @@ class About extends Component {
                 }
             ]
         }
+
+        this.IMAGE_MAX_WIDTH = '1280'
+        this.IMAGE_MAX_HEIGHT = '720'
+        this.IMAGE_MIN_WIDTH = '640'
+        this.IMAGE_MIN_HEIGHT = '480'
     }
 
     componentDidMount() {
@@ -79,9 +94,109 @@ class About extends Component {
                 name: response.data.name,
                 phone: response.data.phonenumber,
                 facebook: response.data.facebook,
-                line: response.data.line
+                line: response.data.line,
+                imgAbout_1: response.data.shopPathImage,
+                imgAbout_2: response.data.infoPathImage,
             })
         });
+    }
+
+    handleBrowseFileImg_1 = (eventTarget) => {
+        console.log(eventTarget.name)
+        if (eventTarget.files[0]) {
+            const options = {
+                maxWidth: this.IMAGE_MAX_WIDTH,
+                maxHeight: this.IMAGE_MAX_HEIGHT,
+                minWidth: this.IMAGE_MIN_WIDTH,
+                minHeight: this.IMAGE_MIN_HEIGHT,
+                orientation: true,
+                canvas: true
+            }
+            if (eventTarget.files[0]) {
+                loadImage(
+                    eventTarget.files[0],
+                    canvas => {
+                        this.setState({
+                            imgAbout_1: canvas.toDataURL('image/jpeg', 0.8),
+                            imgAbout_1Name: eventTarget.files[0].name
+                        })
+                        this.uploadImg({
+                            shopPathImage: canvas.toDataURL('image/jpeg', 0.8),
+                            shopImgName: eventTarget.files[0].name
+                        })
+                    },
+                    options
+                )
+            }
+        }
+    }
+
+    handleBrowseFileImg_2 = (eventTarget) => {
+        console.log('handleBrowseFile2', eventTarget.name)
+        if (eventTarget.files[0]) {
+            const options = {
+                maxWidth: this.IMAGE_MAX_WIDTH,
+                maxHeight: this.IMAGE_MAX_HEIGHT,
+                minWidth: this.IMAGE_MIN_WIDTH,
+                minHeight: this.IMAGE_MIN_HEIGHT,
+                orientation: true,
+                canvas: true
+            }
+            if (eventTarget.files[0]) {
+                loadImage(
+                    eventTarget.files[0],
+                    canvas => {
+
+                        this.setState({
+                            imgAbout_2: canvas.toDataURL('image/jpeg', 0.8),
+                            imgAbout_2Name: eventTarget.files[0].name
+                        })
+
+                        this.uploadImg({
+                            infoPathImage: canvas.toDataURL('image/jpeg', 0.8),
+                            infoImgName: eventTarget.files[0].name
+                        })
+                    },
+                    options
+                )
+            }
+        }
+    }
+
+    uploadImg = (IMG) => {
+        console.log('imgPart:', IMG);
+        axios.post(Constants.URL + Constants.API.STORES.UPDATE_SHOP, {
+            "_id": "640ef43f3338c96b73707526",
+            ...IMG
+        }).then(response => {
+            console.log('response', response.data);
+        });
+    }
+
+    handleImageRatio = e => {
+        const imgId = e.target.id
+        let width = e.target.naturalWidth
+        let height = e.target.naturalHeight
+        let ratio = 1
+
+        if (width > height && width > this.imageWidth) {
+            // Horizontal
+            ratio = height / width
+            width = this.imageWidth
+            height = this.imageWidth * ratio
+        } else if (width < height && height > this.imageHeight) {
+            // Vertical
+            ratio = width / height
+            width = this.imageHeight * ratio
+            height = this.imageHeight
+        }
+
+        if (imgId === 'imgAboutDetail') {
+            this.setState({
+                imgAboutWidth: width,
+                imgAboutHeight: height
+            })
+        }
     }
 
     render() {
@@ -92,7 +207,30 @@ class About extends Component {
                         <div className="col">
                             <div className="row row-cols-2">
                                 <div className="col about-image">
-                                    <img src="https://i.pinimg.com/564x/e2/79/18/e2791866602f193c1c92b6aeb164c18c.jpg" className="about-img" />
+                                    {this.state.imgAbout_1 ?
+                                        (<img
+                                            className="about-img"
+                                            id="imgAboutDetail"
+                                            src={this.state.imgAbout_1}
+                                            onLoad={this.handleImageRatio}
+                                            width={this.state.imgAboutWidth}
+                                            height={this.state.imgAboutHeight}
+                                        />) : (
+                                            'NO IMAGE'
+                                        )}
+                                    <label htmlFor="image_1" className="upload-icon">
+                                        <FontAwesomeIcon icon={faUpload} style={{ fontSize: '20px' }}></FontAwesomeIcon>
+                                    </label>
+                                    <input
+                                        type="file"
+                                        id="image_1"
+                                        name="imgAbout_1Value"
+                                        accept={'.jpg,.jpeg,.png'}
+                                        onChange={e => this.handleBrowseFileImg_1(e.target)}
+                                        style={{ display: 'none' }}
+                                    />
+
+                                    {/* </div> */}
                                 </div>
                                 <div className="col about-text">
                                     <h1>{this.state.name}.</h1>
@@ -170,7 +308,28 @@ class About extends Component {
                                     </div>
                                 </div>
                                 <div className="col about-time">
-                                    <img src="https://i.pinimg.com/564x/8a/f2/de/8af2ded7c7df7af7166afa9dc8a94f20.jpg" className="about-img-bottom" />
+                                    {this.state.imgAbout_2 ?
+                                        (<img
+                                            className="about-img-bottom"
+                                            id="imgAbout2Detail"
+                                            src={this.state.imgAbout_2}
+                                            onLoad={this.handleImageRatio}
+                                            width={this.state.imgAboutWidth}
+                                            height={this.state.imgAboutHeight}
+                                        />) : (
+                                            'NO IMAGE'
+                                        )}
+                                    <label htmlFor="image_2" className="upload-icon-about-time">
+                                        <FontAwesomeIcon icon={faUpload} style={{ fontSize: '20px' }}></FontAwesomeIcon>
+                                    </label>
+                                    <input
+                                        type="file"
+                                        id="image_2"
+                                        name="imgAbout_2Value"
+                                        accept={'.jpg,.jpeg,.png'}
+                                        onChange={e => this.handleBrowseFileImg_2(e.target)}
+                                        style={{ display: 'none' }}
+                                    />
                                     <div className="card card-about-time">
                                         <div className="card-body card-about-time-body">
                                             <div className="row row-cols-1">

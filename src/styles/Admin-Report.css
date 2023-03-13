@@ -13,32 +13,41 @@
 .report-header {
     margin-top: 30px;
 }
+
 .report-body {
     margin-top: 30px;
 }
+
 .report-footer {
     margin-top: 30px;
 }
+
 .card-report {
     border: none;
 }
+
 .card-header {
     background-color: #023047;
     height: 40px;
     font-family: 'Noto Serif Thai', serif;
 }
+
 .header-report {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
+
 #date {
     background-color: white;
 }
+
 .col-dates {
     display: flex;
 }
+
 .form-date-to {
     margin-left: 20px;
 }
+
 input[id="date"] {
     border-radius: 5px;
     border: none;
@@ -48,6 +57,68 @@ input[id="date"] {
     padding-left: 10px;
     font-family: "Chivo Mono", monospace;
 }
+
+#date:hover {
+    background-color: #F8D273;
+}
+
+.text-bk {
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: bold;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 15px;
+}
+
+.select-style-report {
+    width: 150px;
+    height: 30px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: bold;
+}
+
+.select-style-report select {
+    padding: 5px 8px;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    /* background-color: #FFB703; */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.select-style-report select:hover {
+    background-color: #F8D273;
+}
+
+.select-style-report:after {
+    top: 50%;
+    left: 85%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(0, 0, 0, 0);
+    border-top-color: #000000;
+    border-width: 5px;
+    margin-top: -2px;
+    z-index: 100;
+}
+
+.select-style-report select:focus {
+    outline: none;
+}
+
+#list-bk {
+    background-color: white;
+}
+
 .btn-search-date {
     background-color: #FFB703;
     color: #000814;
@@ -55,36 +126,49 @@ input[id="date"] {
     border: none;
     height: 31px;
     font-family: 'Noto Serif Thai', serif;
+    font-weight: bold;
 }
+
 .btn-search-date:hover {
     background-color: #f19143;
 }
-.text-header-report { 
-    display: flex;
+
+.text-header-report {
+    display: grid;
+    /* grid-template-columns: repeat(2, 1fr); */
+    grid-template-columns: 1fr 2fr;
+    margin-left: auto;
+    margin-right: auto;
 }
-.text-header-report > label {
+
+.text-header-report>label {
     font-family: "Chivo Mono", monospace;
-    margin-left: 10px;
 }
+
 .header-text-thai {
     font-family: 'Noto Serif Thai', serif;
 }
+
 .card-body {
     color: #000814;
     font-family: 'Noto Serif Thai', serif;
 }
+
 .list-repoet {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-gap: 50px;
 }
+
 .text-list-report {
     font-family: "Chivo Mono", monospace;
 }
+
 .card-report-footer {
     background-color: #FFB703;
     height: 45px;
 }
+
 .card-title-tital {
     position: absolute;
     bottom: 2px;
@@ -93,4 +177,28 @@ input[id="date"] {
     font-family: "Chivo Mono", monospace;
     font-weight: bold;
     font-size: 18px;
+}
+
+.from-popup-style-listmenu {
+    background-color: #FFB703;
+    overflow: auto;
+    height: 300px;
+    font-family: 'Noto Serif Thai', serif;
+    margin-top: 20px;
+}
+
+.li-list-order-admin {
+    width: 300px;
+    background-color: #00081400;
+    color: white;
+    font-family: 'Noto Serif Thai', serif;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+
+}
+
+.from-popup-style-listmenu-Footer {
+    background-color: #FFB703;
+    font-family: 'Noto Serif Thai', serif;
 }

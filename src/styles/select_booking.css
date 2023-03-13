@@ -5,18 +5,21 @@
     background-color: #000814;
     color: white;
 }
-.form-select-booking > h3 {
+
+.form-select-booking>h3 {
     font-family: 'Noto Serif Thai', serif;
 }
+
 .card-select-booking {
     width: 80%;
     border: none;
     margin-left: 30px;
 }
+
 /* .header-time {
     margin-top: 2px;
 } */
-.header-time > .link-time {
+.header-time>.link-time {
     color: white;
     text-decoration: none;
     width: 6vw;
@@ -26,42 +29,50 @@
     padding-top: 2px;
 }
 
-.header-time > .link-time:hover {
+.header-time>.link-time:hover {
     background-color: #FFB703;
     color: white;
 }
+
 .active-time {
     color: #FE5244;
     text-decoration: none;
     border-radius: 5px;
     text-align: center;
 }
-.header-time > Button {
+
+.header-time>Button {
     margin-top: 2px;
     background-color: #00081400;
     border: none;
 }
-.header-time > Button:hover {
+
+.header-time>Button:hover {
     background-color: #FFB703;
 }
-.header-time > Button:after {
+
+.header-time>Button:after {
     background-color: #FFB703;
-} 
+}
+
 .header-data-booking {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-gap: 10px;
 }
-.header-data-booking > b {
+
+.header-data-booking>b {
     font-family: "Chivo Mono", monospace;
 }
+
 .data-booking {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-gap: 10px;
     margin-top: 10px;
 }
-.active-time {
+
+.active-bk {
     background-color: #FFB703;
     color: white;
     text-decoration: none;
@@ -71,6 +82,7 @@
     text-align: center;
     padding-top: 4px;
 }
+
 .box:hover {
     color: #FE5244;
 }

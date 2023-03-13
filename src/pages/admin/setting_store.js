@@ -75,7 +75,7 @@ class SettingStore extends Component {
                         <div className="row row-cols-1">
                             <div className="col">
                                 <div className="row row-cols-auto">
-                                    <div className="col" style={{ fontWeight: 'bold' }}>Imsges</div>
+                                    {/* <div className="col" style={{ fontWeight: 'bold' }}>Imsges</div> */}
                                     <div className="col">
                                         <form className="from-store-input">
                                             <p>

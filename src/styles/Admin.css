@@ -4,31 +4,32 @@
     font-family: "Chivo Mono", monospace;
     background-color: #000814;
 }
-.from-menu {
-    margin-left: 40px;
-}
+
 .teble-menu {
     /* color: #f55536; */
     margin-top: 10px;
     display: flex;
 }
-.teble-menu > .link-menu:hover {
+
+.teble-menu>.link-menu:hover {
     color: white;
 }
+
 .dropdown-bk {
     display: block;
 }
+
 /* .dropdown-bk > button {
     background-color: #00000000;
 } */
-.link-menu > p {
+.link-menu>p {
     display: flex;
     font-size: 13px;
     margin-top: 10px;
     margin-left: 20px;
 }
 
-.teble-menu > .link-menu {
+.teble-menu>.link-menu {
     color: white;
     text-decoration: none;
     width: 10vw;
@@ -36,22 +37,26 @@
     border-radius: 5px;
     margin-top: 10px;
 }
-.teble-menu > .link-menu:hover {
+
+.teble-menu>.link-menu:hover {
     color: white;
     background-color: #ffb238;
 }
+
 .active-menu {
     color: white;
     text-decoration: none;
     background-color: #FFB703;
     border-radius: 5px;
     width: 160px;
-} 
+}
+
 .label-menu {
     margin-left: 10px;
     font-family: "Chivo Mono", monospace;
 }
-.teble-menu > button {
+
+.teble-menu>button {
     color: white;
     text-decoration: none;
     width: 10vw;
@@ -60,21 +65,25 @@
     margin-top: 10px;
     background-color: #00000000;
 }
-.teble-menu > button:hover {
+
+.teble-menu>button:hover {
     color: white;
     background-color: #ffb238;
 }
+
 .active-bk {
     color: white;
     text-decoration: none;
     background-color: #FFB703;
     border-radius: 5px;
     width: 160px;
-} 
+}
+
 .card-body-Dropdown {
     background-color: #F8D273;
 }
-.card-body > .link-Dropdown {
+
+.card-body>.link-Dropdown {
     color: black;
     width: 140px;
     height: 40px;
@@ -83,14 +92,16 @@
     font-size: 13px;
     font-weight: bold;
 }
-.card-body > .link-Dropdown:hover {
+
+.card-body>.link-Dropdown:hover {
     color: white;
     background-color: #ffb238;
 }
-.card-body > .active-Dropdown {
+
+.card-body>.active-Dropdown {
     color: #f55536;
     background-color: #FFE5A6;
     border-radius: 5px;
     width: 140px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-} 
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

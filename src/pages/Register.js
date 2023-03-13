@@ -16,6 +16,16 @@ class Register extends Component {
             name: '',
             position: '',
             datalist: [],
+            grouplist: [
+                {
+                    name: 'Cashier',
+                    value: 'cashier'
+                },
+                {
+                    name: 'Kitchen',
+                    value: 'kitchen'
+                }
+            ],
             registersucces: false
         }
     }
@@ -35,22 +45,6 @@ class Register extends Component {
     onChangePosition = (e) => {
         this.setState({ position: e.target.value });
     }
-
-    // Sigin = (username) => {
-    //     console.log(username);
-
-    //     const register = this.state.datalist
-
-    //     register.push({
-    //         username: this.state.username,
-    //         password: this.state.password,
-    //         name: this.state.name,
-    //         position: this.state.position
-    //     })
-    //     this.setState({ datalist: register })
-
-    //     console.log(this.state.datalist);
-    // }
 
     onGetData = () => {
 
@@ -84,7 +78,7 @@ class Register extends Component {
                                 </NavLink>
                             </div>
                             <div className="register-logo">
-                                image Logo
+                                <img src="https://i.pinimg.com/564x/e2/79/18/e2791866602f193c1c92b6aeb164c18c.jpg" className="register-img" />
                             </div>
                         </div>
                         <div className="col">
@@ -129,14 +123,20 @@ class Register extends Component {
                                             </form>
                                         </div>
                                         <div className="col">
-                                            <form className="from-register-input">
-                                                <p>
-                                                    <label className="login-text">Position</label>
-                                                    <input className="w3-input" type="text" id="password"
-                                                        value={this.state.position}
-                                                        onChange={(e) => { this.onChangePosition(e) }} />
-                                                </p>
-                                            </form>
+                                            <label className="login-text">Position</label>
+                                            <div className="select-style-position" style={{ marginTop: '10px' }}>
+                                                <select value={this.state.position}
+                                                    onChange={(e) => { this.onChangePosition(e) }} >
+                                                    <option id="dr" value={' '} >
+                                                        เลือก
+                                                    </option>
+                                                    {this.state.grouplist.map((item, i) => (
+                                                        <option id="dr" key={'brand' + i} value={item.name} style={{ fontFamily: 'Chivo Mono' }}>
+                                                            {item.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="from-btn-sigUp">
@@ -145,8 +145,6 @@ class Register extends Component {
                                             <button type="button" className="btn btn-dark btn-sigUp"
                                                 onClick={() => { this.onGetData() }}>Sign Up</button>
                                         </NavLink>
-                                        {/* <button type="button" className="btn btn-dark btn-sigin"
-                                            onClick={() => this.onGetData()}>Sign Up</button> */}
                                     </div>
                                 </div>
                             </div>

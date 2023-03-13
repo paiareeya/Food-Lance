@@ -78,8 +78,10 @@ class SelectBooking extends Component {
                                 <div className="col header-time" key={'times' + i} >
                                     <NavLink
                                         onClick={() => { this.ClickTime(item, i) }}
-                                        className={this.state.boxs === i ? 'active-time' : 'box'}
-                                    >{item.name}</NavLink>
+                                        className={this.state.boxs === i ? 'active-bk' : 'box'}
+                                    >
+                                        <span style={{ fontFamily: 'Chivo Mono' }}>{item.name}</span>
+                                    </NavLink>
                                 </div>
                             ))}
                         </div>

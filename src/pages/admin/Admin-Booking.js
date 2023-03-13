@@ -3,7 +3,7 @@ import { Button, Modal } from "react-bootstrap";
 import '../../styles/Admin-Booking.css';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faCircleExclamation, faSquareFull, faStop } from '@fortawesome/free-solid-svg-icons'
 import Constants from '../../constants';
 
 class AdminBooking extends Component {
@@ -16,11 +16,6 @@ class AdminBooking extends Component {
             showSuccess: false,
             showFaill: false,
             admin_bookings: '',
-            // admin_amount_cus: '',
-            // check_in: '',
-            // check_out: '',
-            // status_booking: '',
-            dataBooking: [],
             booking_name: '',
             booking_amount: '',
             dateName: '',
@@ -32,6 +27,9 @@ class AdminBooking extends Component {
             list_bookings: [],
             get_dataBooking: [],
             list_time: [],
+            dataBooking: [],
+            data_qr: [],
+            QR: '',
             id_status: '',
             status_booking: [
                 {
@@ -57,12 +55,21 @@ class AdminBooking extends Component {
                     isCheckIn: false,
                     isCheckOut: false
                 }
-            ]
+            ],
+            table: [
+                { name: 'A1' }, { name: 'A2' }, { name: 'A3' }, { name: 'A4' }, { name: 'A5' }, { name: 'A6' },
+                { name: 'A7' }, { name: 'A8' }, { name: 'A9' }, { name: 'A10' },
+                { name: 'A11' }, { name: 'A12' }, { name: 'A13' }, { name: 'A14' },
+                { name: 'A15' }, { name: 'A16' }, { name: 'A17' }, { name: 'A18' }, { name: 'A18' }, { name: 'A20' },
+            ],
+            id_teble: '',
+            name_table: ''
         }
     }
 
     componentDidMount() {
         this.onFindBooking();
+        // this.qrCode();
     }
 
     handleClose = () => {
@@ -140,14 +147,15 @@ class AdminBooking extends Component {
         this.setState({ time: e.target.value });
 
         const get_time = e.target.value
-        console.log('get_time:', get_time);
+        // console.log('get_time:', get_time);
+        // console.log("name_table", this.state.name_table);
 
         if (this.state.admin_bookings === " " || get_time === " ") {
             return
         }
 
         axios.post(Constants.URL + Constants.API.BOOKING.FIND_ONE_BOOKING, {
-            "bktable": this.state.admin_bookings,
+            "bktable": this.state.name_table,
             "bktime": get_time,
         }).then(response => {
             console.log('response:', response.data);
@@ -164,6 +172,7 @@ class AdminBooking extends Component {
 
             console.log('name:', name, 'phone:', phone, 'amount:', amount);
             this.setState({
+                data_qr: response.data,
                 get_dataBooking: getlist,
                 dateTime: time,
                 dateTimeCheckIn: checkIn,
@@ -191,6 +200,15 @@ class AdminBooking extends Component {
             });
     }
 
+    ClickTeble = (bktable) => {
+        this.setState({
+            name_table: bktable,
+            id_teble: bktable
+        });
+        // console.log('bktable', bktable);
+
+    }
+
     onClickAddBooking = () => {
 
         axios.post(Constants.URL + Constants.API.BOOKING.ADMIN_CREATE_BOOKING, {
@@ -212,13 +230,13 @@ class AdminBooking extends Component {
         const getId = get.map(item => item._id);
         const getBktable = get.map(item => item.bktable);
 
-        const getList_booking = this.state.list_bookings.filter(item => item.name == this.state.admin_bookings)
+        const getList_booking = this.state.list_bookings.filter(item => item.name == this.state.name_table)
 
         const getStatus = this.state.status_booking.filter(item => item.id == this.state.id_status);
 
         // customer Create Booking to isBooking
         if (getStatus[0].id === 1) {
-            const BK_name = this.state.admin_bookings;
+            const BK_name = this.state.name_table;
             console.log('BK_name:', BK_name);
             if (BK_name === "") {
                 this.setState({
@@ -244,8 +262,8 @@ class AdminBooking extends Component {
                 cus_amounts: '',
             })
         }
-        // Admin Uodate Booking to Check In or Check Out
-        else if (getStatus[0].id === 2 || getStatus[0].id === 3) {
+        // Admin Uodate Booking to Check In 
+        else if (getStatus[0].id === 2) {
             axios.post(Constants.URL + Constants.API.BOOKING.UPDATE_BOOKING, {
                 "_id": getId,
                 "bktable": getBktable,
@@ -253,6 +271,19 @@ class AdminBooking extends Component {
                 "isCheckOut": getStatus[0].isCheckOut
             }).then(response => {
                 console.log(response.data);
+
+                const data = this.state.data_qr
+
+                axios.post(Constants.URL + Constants.API.QR.CREATE_QR, {
+                    "id": data[0]._id,
+                    "tbname": data[0].bktable,
+                }).then(response => {
+                    console.log('qr', response.data);
+                    this.setState({
+                        QR: response.data,
+                    })
+                });
+
                 this.setState({
                     showUpdate: true
                 })
@@ -264,6 +295,32 @@ class AdminBooking extends Component {
                     admin_bookings: '',
                     time: '',
                     id_status: ''
+                })
+                this.onFindBooking();
+            });
+        }
+        // Admin Uodate Booking to Check Out
+        else if (getStatus[0].id === 3) {
+            axios.post(Constants.URL + Constants.API.BOOKING.UPDATE_BOOKING, {
+                "_id": getId,
+                "bktable": getBktable,
+                "isCheckIn": getStatus[0].isCheckIn,
+                "isCheckOut": getStatus[0].isCheckOut
+            }).then(response => {
+                console.log(response.data);
+
+                this.setState({
+                    showUpdate: true
+                })
+                this.setState({
+                    dateName: '',
+                    datePhone: '',
+                    dateAmount: '',
+                    dateTime: '',
+                    admin_bookings: '',
+                    time: '',
+                    id_status: '',
+                    dateTimeCheckIn: ''
                 })
                 this.onFindBooking();
             });
@@ -291,28 +348,449 @@ class AdminBooking extends Component {
 
     }
 
+    qrCode = (e) => {
+        axios.post(Constants.URL + Constants.API.QR.CREATE_QR, {
+            "id": "63e49a046b66738c02d6a1cf",
+            "tbname": "A1"
+
+        })
+            .then(response => {
+                console.log('qr', response.data);
+                // this.setState({
+                //     list_menu_moblie: response.data
+                // })
+            });
+    }
+
     render() {
         return (
             <div className="from-admin-booking">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-7">
+                            <h1 className="header-text">Booking</h1>
                             <div className="col">
-                                <div className="row">
-                                    <div className="col-sm-2">
-                                        <button type="button" className="btn btn-add-booking"
-                                            onClick={() => { this.handleAddBooking() }}>
-                                            <b>Add</b>
-                                        </button>
+                                <div className="row-table">
+                                    <div className="col-table-top">
+                                        <div onClick={() => { this.ClickTeble('A1') }}
+                                            className={this.state.id_teble === 'A1' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A1</label>
+                                                <div className="col-icons1-3">
+                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                </div>
+                                                <div className="col-icons1-3">
+                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A2') }}
+                                            className={this.state.id_teble === 'A2' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A2</label>
+                                                <div className="col-icons1-3">
+                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                </div>
+                                                <div className="col-icons1-3">
+                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A3') }}
+                                            className={this.state.id_teble === 'A3' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A3</label>
+                                                <div className="col-icons1-3">
+                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                </div>
+                                                <div className="col-icons1-3">
+                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A4') }}
+                                            className={this.state.id_teble === 'A4' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A4</label>
+                                                <div className="row-icons">
+                                                    <div className="icon-left-4-6">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="col-icons4-6">
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="icon-rigth-4-6">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A5') }}
+                                            className={this.state.id_teble === 'A5' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A5</label>
+                                                <div className="row-icons">
+                                                    <div className="icon-left-4-6">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="col-icons4-6">
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="icon-rigth-4-6">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A6') }}
+                                            className={this.state.id_teble === 'A6' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A6</label>
+                                                <div className="row-icons">
+                                                    <div className="icon-left-4-6">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="col-icons4-6">
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="icon-rigth-4-6">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="card card-toilet">
+                                            <div className="card-body body-table">
+                                                <label>Toilet</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    {/* <div className="col-sm-10">
-                                        <button type="button" className="btn btn-delete-booking"
-                                            onClick={() => { this.handleDeleteBooking() }}>
-                                            <b>Delete</b>
-                                        </button>
-                                    </div> */}
+                                    <div className="row-table-center">
+                                        <div className="row-col-table">
+                                            <div onClick={() => { this.ClickTeble('A7') }}
+                                                className={this.state.id_teble === 'A7' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A7</label>
+                                                    <div className="row-icons">
+                                                        <div className="icon-left-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-7-10">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="icon-rigth-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A8') }}
+                                                className={this.state.id_teble === 'A8' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A8</label>
+                                                    <div className="row-icons">
+                                                        <div className="icon-left-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-7-10">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="icon-rigth-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A9') }}
+                                                className={this.state.id_teble === 'A9' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A9</label>
+                                                    <div className="row-icons">
+                                                        <div className="icon-left-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-7-10">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="icon-rigth-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A10') }}
+                                                className={this.state.id_teble === 'A10' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A10</label>
+                                                    <div className="row-icons">
+                                                        <div className="icon-left-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-7-10">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="icon-rigth-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row-col-table">
+                                            <div onClick={() => { this.ClickTeble('A11') }}
+                                                className={this.state.id_teble === 'A11' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A11</label>
+                                                    <div className="row-icons">
+                                                        <div className="icon-left-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-7-10">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="icon-rigth-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A12') }}
+                                                className={this.state.id_teble === 'A12' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A12</label>
+                                                    <div className="row-icons">
+                                                        <div className="icon-left-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-7-10">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="icon-rigth-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A13') }}
+                                                className={this.state.id_teble === 'A13' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A13</label>
+                                                    <div className="row-icons">
+                                                        <div className="icon-left-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-7-10">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="icon-rigth-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A14') }}
+                                                className={this.state.id_teble === 'A14' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A14</label>
+                                                    <div className="row-icons">
+                                                        <div className="icon-left-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-7-10">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="icon-rigth-7-10">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-table-bottom">
+                                        <div onClick={() => { this.ClickTeble('A15') }}
+                                            className={this.state.id_teble === 'A15' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A15</label>
+                                                <div className="row-icons">
+                                                    <div className="icon-left-15-16">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-15-16"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-15-16"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="col-icons-15-16">
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-15-16"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-15-16"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="icon-rigth-15-16">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-15-16"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-15-16"></FontAwesomeIcon>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A16') }}
+                                            className={this.state.id_teble === 'A16' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A16</label>
+                                                <div className="row-icons">
+                                                    <div className="icon-left-15-16">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-15-16"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-15-16"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="col-icons-15-16">
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-15-16"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-15-16"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="icon-rigth-15-16">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-15-16"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-15-16"></FontAwesomeIcon>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A17') }}
+                                            className={this.state.id_teble === 'A17' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table card-17-18">
+                                                <label>A17</label>
+                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                <div className="row-icons">
+                                                    <div className="icon-left-17-18">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="col-icons-17-18">
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-17-18"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-17-18"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="icon-rigth-17-18">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-17-18"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-17-18"></FontAwesomeIcon>
+                                                    </div>
+                                                </div>
+                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A18') }}
+                                            className={this.state.id_teble === 'A18' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A18</label>
+                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                <div className="row-icons">
+                                                    <div className="icon-left-17-18">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="col-icons-17-18">
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-17-18"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-17-18"></FontAwesomeIcon>
+                                                    </div>
+                                                    <div className="icon-rigth-17-18">
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-17-18"></FontAwesomeIcon>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-17-18"></FontAwesomeIcon>
+                                                    </div>
+                                                </div>
+                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A19') }}
+                                            className={this.state.id_teble === 'A19' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A19</label>
+                                                <div className="row-icons">
+                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-19-20"></FontAwesomeIcon>
+                                                    <span>
+                                                        <div className="col-icons-19-20">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-19-20">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-19-20"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-19-20"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-19-20">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                        </div>
+                                                    </span>
+                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-19-20"></FontAwesomeIcon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A20') }}
+                                            className={this.state.id_teble === 'A20' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A20</label>
+                                                <div className="row-icons">
+                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-19-20"></FontAwesomeIcon>
+                                                    <span>
+                                                        <div className="col-icons-19-20">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-19-20">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-19-20"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-19-20"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons-19-20">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                        </div>
+                                                    </span>
+                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-19-20"></FontAwesomeIcon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <h1>Images Booking</h1>
                             </div>
                         </div>
                         <div className="col-7 col-md-4">
@@ -321,20 +799,6 @@ class AdminBooking extends Component {
                                     <div className="row row-cols-1">
                                         <div className="col dropdown-booking">
                                             <div className="select-style-admin-booking">
-                                                <select value={this.state.admin_bookings}
-                                                    onChange={(e) => { this.onChangeBooking(e) }} >
-                                                    <option id="dr" value={' '}>
-                                                        เลือกโต๊ะ
-                                                    </option>
-                                                    {this.state.list_bookings.map((item, i) => (
-                                                        <option id="dr" key={'brand' + i} value={item.name} style={{ fontFamily: 'Chivo Mono' }}>
-                                                            {item.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </div>
-                                            <div className="cun-bk">{'|'}</div>
-                                            <div className="select-style-admin-booking" style={{ marginLeft: '10px' }}>
                                                 <select value={this.state.time}
                                                     onChange={(e) => { this.onChangeTime(e) }} >
                                                     <option id="dr" value={' '} >
@@ -482,13 +946,33 @@ class AdminBooking extends Component {
                                     <Modal.Header closeButton className="from-popup-style-Update-booking">
                                         <Modal.Title><b style={{ fontFamily: 'Chivo Mono' }}>Update Complete</b></Modal.Title>
                                     </Modal.Header>
-                                    <Modal.Body className="from-popup-style">
+                                    <Modal.Body className="from-popup-style-Update">
                                         <div className="body-text-booking-Update">
                                             <FontAwesomeIcon icon={faCircleCheck} className="icon-faCircleCheck-booking"></FontAwesomeIcon> <br />
                                             <b style={{ fontFamily: 'Chivo Mono' }}>Congats! Your Update successfully done</b>
+                                            {this.state.QR ?
+                                                (<>
+                                                    <p>QR CODE</p>
+                                                    {this.state.QR ?
+                                                        (<>
+                                                            <img
+                                                                id="imgMenuDetail"
+                                                                src={this.state.QR}
+                                                                alt="QR"
+                                                                className="li-image-qr"
+                                                            />
+                                                        </>) :
+                                                        (<>
+                                                            <span className="text-qr">
+                                                                <p>NO QR</p>
+                                                            </span>
+                                                        </>)
+                                                    }
+                                                </>) : null}
+                                            <a className="download_qr" download="QR.png" href={this.state.QR}>Download QR</a>
                                         </div>
                                     </Modal.Body>
-                                    <Modal.Footer className="from-popup-style">
+                                    <Modal.Footer className="from-popup-style-Update">
                                         <Button className="btn-footer" variant="primary"
                                             onClick={() => { this.handleClose() }}>
                                             ตกลง

@@ -4,7 +4,7 @@ import { Button, Modal } from "react-bootstrap";
 import Constants from '../../constants';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faCircleExclamation, faSquareFull, faStop } from '@fortawesome/free-solid-svg-icons'
 
 class AdminWalkIn extends Component {
 
@@ -16,16 +16,22 @@ class AdminWalkIn extends Component {
             showSuccess: false,
             showWalkIn: false,
             showFaill: false,
+            showQr: false,
             admin_bookings: '',
             dateName: '',
             datePhone: '',
             dateAmount: '',
             time: '',
             dateTime: '',
+            id_teble: '',
+            name_table: '',
+            status_walkin: '',
+            QR: '',
             list_bookings: [],
             get_dataBooking: [],
             walkin_bookings: [],
             dataBooking: [],
+            data_qr: [],
             id_status: '',
             status_booking: [
                 {
@@ -39,7 +45,8 @@ class AdminWalkIn extends Component {
                     isCheckIn: false,
                     isCheckOut: true
                 }
-            ]
+            ],
+
         }
     }
 
@@ -53,31 +60,9 @@ class AdminWalkIn extends Component {
             showUpdate: false,
             showWalkIn: false,
             showSuccess: false,
-            showFaill: false
+            showFaill: false,
+            showQr: false,
         })
-    }
-    onChangeBooking = (e) => {
-        this.setState({ admin_bookings: e.target.value });
-
-        if (e.target.value === " ") {
-            return
-        }
-        axios.post(Constants.URL + Constants.API.BOOKING.FIND_WALKIN, {
-            "bktable": e.target.value
-        })
-            .then(response => {
-                // console.log(response.data);
-                const BK = response.data
-
-                this.setState({
-                    get_dataBooking: BK,
-                    walkin_bookings: BK,
-                    dateName: response.data.bkname,
-                    datePhone: response.data.bknumber,
-                    dateAmount: response.data.bkcustomer
-                })
-            });
-
     }
     onChangeStatusBooking = (e) => {
         this.setState({ id_status: e.target.value });
@@ -102,10 +87,37 @@ class AdminWalkIn extends Component {
             });
     }
 
+    ClickTeble = (bktable) => {
+        this.setState({
+            name_table: bktable,
+            id_teble: bktable,
+            status_walkin: ''
+        });
+
+        axios.post(Constants.URL + Constants.API.BOOKING.FIND_WALKIN, {
+            "bktable": bktable
+        })
+            .then(response => {
+                const BK = response.data
+                console.log('BK', BK);
+                console.log('id_teble', this.state.id_teble);
+
+                if (BK !== undefined) {
+                    this.setState({
+                        status_walkin: BK,
+                        get_dataBooking: BK,
+                        walkin_bookings: BK,
+                        dateName: BK.bkname,
+                        datePhone: BK.bknumber,
+                        dateAmount: BK.bkcustomer
+                    })
+                }
+            });
+    }
 
     UploadBooking = () => {
         const get = this.state.get_dataBooking;
-        const getList_booking = this.state.list_bookings.filter(item => item.name == this.state.admin_bookings)
+        const getList_booking = this.state.list_bookings.filter(item => item.name == this.state.name_table)
         const getId = get._id
         const getBktable = get.bktable
         console.log('getId', getId);
@@ -115,7 +127,7 @@ class AdminWalkIn extends Component {
         console.log(getStatus);
 
         if (getStatus[0].id === 1) {
-            const BK_name = this.state.admin_bookings;
+            const BK_name = this.state.name_table;
             console.log('BK_name:', BK_name);
             if (BK_name === "") {
                 this.setState({
@@ -131,6 +143,24 @@ class AdminWalkIn extends Component {
                 "isWalkIn": getStatus[0].isWalkIn,
             }).then(response => {
                 console.log(response.data);
+
+                const data = response.data
+                console.log('data', data);
+                console.log('QR_id', data._id);
+                console.log('QR_name', data.bktable);
+
+
+                axios.post(Constants.URL + Constants.API.QR.CREATE_QR, {
+                    "id": data._id,
+                    "tbname": data.bktable,
+                }).then(response => {
+                    console.log('qr', response.data);
+                    this.setState({
+                        QR: response.data,
+                        // showQr: true
+                    })
+                });
+
             });
             this.setState({
                 showWalkIn: true,
@@ -172,33 +202,575 @@ class AdminWalkIn extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-7">
+                            <h1 className="header-text">Walk In</h1>
                             <div className="col">
-                                <h1>Images Booking</h1>
+                                <div className="row-table">
+                                    <div className="col-table-top">
+                                        <div onClick={() => { this.ClickTeble('A1') }}
+                                            className={this.state.id_teble === 'A1' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A1</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A1' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <div className="col-icons1-3">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons1-3">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                        </div>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A2') }}
+                                            className={this.state.id_teble === 'A2' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A2</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A2' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <div className="col-icons1-3">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons1-3">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                        </div>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A3') }}
+                                            className={this.state.id_teble === 'A3' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A3</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A3' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <div className="col-icons1-3">
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-1-3"></FontAwesomeIcon>
+                                                        </div>
+                                                        <div className="col-icons1-3">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-1-3"></FontAwesomeIcon>
+                                                        </div>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A4') }}
+                                            className={this.state.id_teble === 'A4' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A4</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A4' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <div className="row-icons">
+                                                            <div className="icon-left-4-6">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="col-icons4-6">
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="icon-rigth-4-6">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A5') }}
+                                            className={this.state.id_teble === 'A5' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A5</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A5' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <div className="row-icons">
+                                                            <div className="icon-left-4-6">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="col-icons4-6">
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="icon-rigth-4-6">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A6') }}
+                                            className={this.state.id_teble === 'A6' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A6</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A6' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <div className="row-icons">
+                                                            <div className="icon-left-4-6">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-4-6"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="col-icons4-6">
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-4-6"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="icon-rigth-4-6">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-4-6"></FontAwesomeIcon>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div className="card card-toilet">
+                                            <div className="card-body body-table">
+                                                <label>Toilet</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="row-table-center">
+                                        <div className="row-col-table">
+                                            <div onClick={() => { this.ClickTeble('A7') }}
+                                                className={this.state.id_teble === 'A7' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A7</label>
+                                                    {this.state.status_walkin && this.state.id_teble === 'A7' ?
+                                                        <>
+                                                            <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                        </> : //ถ้าไม่มีรูปจะทำ ull
+                                                        <>
+                                                            <div className="row-icons">
+                                                                <div className="icon-left-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-7-10">
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="icon-rigth-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A8') }}
+                                                className={this.state.id_teble === 'A8' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A8</label>
+                                                    {this.state.status_walkin && this.state.id_teble === 'A8' ?
+                                                        <>
+                                                            <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                        </> : //ถ้าไม่มีรูปจะทำ ull
+                                                        <>
+                                                            <div className="row-icons">
+                                                                <div className="icon-left-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-7-10">
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="icon-rigth-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A9') }}
+                                                className={this.state.id_teble === 'A9' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A9</label>
+                                                    {this.state.status_walkin && this.state.id_teble === 'A9' ?
+                                                        <>
+                                                            <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                        </> : //ถ้าไม่มีรูปจะทำ ull
+                                                        <>
+                                                            <div className="row-icons">
+                                                                <div className="icon-left-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-7-10">
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="icon-rigth-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A10') }}
+                                                className={this.state.id_teble === 'A10' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A10</label>
+                                                    {this.state.status_walkin && this.state.id_teble === 'A10' ?
+                                                        <>
+                                                            <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                        </> : //ถ้าไม่มีรูปจะทำ ull
+                                                        <>
+                                                            <div className="row-icons">
+                                                                <div className="icon-left-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-7-10">
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="icon-rigth-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="row-col-table">
+                                            <div onClick={() => { this.ClickTeble('A11') }}
+                                                className={this.state.id_teble === 'A11' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A11</label>
+                                                    {this.state.status_walkin && this.state.id_teble === 'A11' ?
+                                                        <>
+                                                            <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                        </> : //ถ้าไม่มีรูปจะทำ ull
+                                                        <>
+                                                            <div className="row-icons">
+                                                                <div className="icon-left-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-7-10">
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="icon-rigth-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A12') }}
+                                                className={this.state.id_teble === 'A12' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A12</label>
+                                                    {this.state.status_walkin && this.state.id_teble === 'A12' ?
+                                                        <>
+                                                            <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                        </> : //ถ้าไม่มีรูปจะทำ ull
+                                                        <>
+                                                            <div className="row-icons">
+                                                                <div className="icon-left-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-7-10">
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="icon-rigth-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A13') }}
+                                                className={this.state.id_teble === 'A13' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A13</label>
+                                                    {this.state.status_walkin && this.state.id_teble === 'A13' ?
+                                                        <>
+                                                            <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                        </> : //ถ้าไม่มีรูปจะทำ ull
+                                                        <>
+                                                            <div className="row-icons">
+                                                                <div className="icon-left-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-7-10">
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="icon-rigth-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div onClick={() => { this.ClickTeble('A14') }}
+                                                className={this.state.id_teble === 'A14' ? "card card-table-top active-teble" : "card card-table-top"}>
+                                                <div className="card-body body-table">
+                                                    <label>A14</label>
+                                                    {this.state.status_walkin && this.state.id_teble === 'A14' ?
+                                                        <>
+                                                            <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                        </> : //ถ้าไม่มีรูปจะทำ ull
+                                                        <>
+                                                            <div className="row-icons">
+                                                                <div className="icon-left-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-left-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-7-10">
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="icon-rigth-7-10">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-7-10"></FontAwesomeIcon>
+                                                                </div>
+                                                            </div>
+                                                        </>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-table-bottom">
+                                        <div onClick={() => { this.ClickTeble('A15') }}
+                                            className={this.state.id_teble === 'A15' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A15</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A15' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <div className="row-icons">
+                                                            <div className="icon-left-15-16">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-15-16"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-15-16"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="col-icons-15-16">
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-15-16"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-15-16"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="icon-rigth-15-16">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-15-16"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-15-16"></FontAwesomeIcon>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A16') }}
+                                            className={this.state.id_teble === 'A16' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A16</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A16' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <div className="row-icons">
+                                                            <div className="icon-left-15-16">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-15-16"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-15-16"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="col-icons-15-16">
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-15-16"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-15-16"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="icon-rigth-15-16">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-15-16"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-15-16"></FontAwesomeIcon>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A17') }}
+                                            className={this.state.id_teble === 'A17' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table card-17-18">
+                                                <label>A17</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A17' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                        <div className="row-icons">
+                                                            <div className="icon-left-17-18">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="col-icons-17-18">
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-17-18"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-17-18"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="icon-rigth-17-18">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-17-18"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-17-18"></FontAwesomeIcon>
+                                                            </div>
+                                                        </div>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A18') }}
+                                            className={this.state.id_teble === 'A18' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A18</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A18' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                        <div className="row-icons">
+                                                            <div className="icon-left-17-18">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="col-icons-17-18">
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-17-18"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-17-18"></FontAwesomeIcon>
+                                                            </div>
+                                                            <div className="icon-rigth-17-18">
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-17-18"></FontAwesomeIcon>
+                                                                <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-17-18"></FontAwesomeIcon>
+                                                            </div>
+                                                        </div>
+                                                        <FontAwesomeIcon icon={faStop} className="icon-faStop-left-17-18"></FontAwesomeIcon>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A19') }}
+                                            className={this.state.id_teble === 'A19' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A19</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A19' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <div className="row-icons">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-19-20"></FontAwesomeIcon>
+                                                            <span>
+                                                                <div className="col-icons-19-20">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-19-20">
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-19-20"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-19-20"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-19-20">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                </div>
+                                                            </span>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-19-20"></FontAwesomeIcon>
+                                                        </div>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div onClick={() => { this.ClickTeble('A20') }}
+                                            className={this.state.id_teble === 'A20' ? "card card-table-center-top active-teble" : "card card-table-center-top"}>
+                                            <div className="card-body body-table">
+                                                <label>A20</label>
+                                                {this.state.status_walkin && this.state.id_teble === 'A20' ?
+                                                    <>
+                                                        <b style={{ fontFamily: 'Noto Serif Thai', fontSize: '13px', color: 'white' }}>กำลังใช้</b>
+                                                    </> : //ถ้าไม่มีรูปจะทำ ull
+                                                    <>
+                                                        <div className="row-icons">
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-left-19-20"></FontAwesomeIcon>
+                                                            <span>
+                                                                <div className="col-icons-19-20">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-19-20">
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-19-20"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faSquareFull} className="icon-faSquareFull-19-20"></FontAwesomeIcon>
+                                                                </div>
+                                                                <div className="col-icons-19-20">
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                    <FontAwesomeIcon icon={faStop} className="icon-faStop-19-20"></FontAwesomeIcon>
+                                                                </div>
+                                                            </span>
+                                                            <FontAwesomeIcon icon={faStop} className="icon-faStop-rigth-19-20"></FontAwesomeIcon>
+                                                        </div>
+                                                    </>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className="col-7 col-md-4">
                             <div className="col">
                                 <div className="from-admin-booking-center">
                                     <div className="row row-cols-1">
-                                        <div className="col dropdown-booking">
-                                            <div className="select-style-admin-booking">
-                                                <select value={this.state.admin_bookings}
-                                                    onChange={(e) => { this.onChangeBooking(e) }} >
-                                                    <option id="dr" value={' '}>
-                                                        เลือกโต๊ะ
-                                                    </option>
-                                                    {this.state.list_bookings.map((item, i) => (
-                                                        <option id="dr" key={'brand' + i} value={item.name}>
-                                                            {item.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </div>
-                                            <div className="cun-bk">{'|'}</div>
-                                            <div className="select-style-walkIn" style={{ marginLeft: '10px' }}>
-                                                <b>Walk In</b>
-                                            </div>
-                                        </div>
                                         <div className="col">
                                             <div className="from-admin-booking-center">
                                                 <div className="row row-cols-1">
@@ -279,13 +851,13 @@ class AdminWalkIn extends Component {
                                     <Modal.Header closeButton className="from-popup-style-Update-booking">
                                         <Modal.Title><b style={{ fontFamily: 'Chivo Mono' }}>Update Complete</b></Modal.Title>
                                     </Modal.Header>
-                                    <Modal.Body className="from-popup-style">
+                                    <Modal.Body className="from-popup-style-Update">
                                         <div className="body-text-booking-Update">
                                             <FontAwesomeIcon icon={faCircleCheck} className="icon-faCircleCheck-Walk"></FontAwesomeIcon> <br />
                                             <b style={{ fontFamily: 'Chivo Mono' }}>Congats! Your Update successfully done</b>
                                         </div>
                                     </Modal.Body>
-                                    <Modal.Footer className="from-popup-style">
+                                    <Modal.Footer className="from-popup-style-Update">
                                         <Button className="btn-footer" variant="primary"
                                             onClick={() => { this.handleClose() }}>
                                             ตกลง
@@ -294,21 +866,38 @@ class AdminWalkIn extends Component {
                                 </div>
                             </Modal>
 
-                            <Modal className="from-popup-success" show={this.state.showWalkIn}
+                            <Modal className="from-popup-walkIn" show={this.state.showWalkIn}
                                 onHide={() => { this.handleClose() }}>
-                                <div className="from-popup-style-success">
-                                    <Modal.Header closeButton className="from-popup-style-add">
+                                <div className="from-popup-style-walkIn">
+                                    <Modal.Header closeButton className="from-popup-style-walkIn">
                                         <Modal.Title><b style={{ fontFamily: 'Chivo Mono' }}>Success</b></Modal.Title>
                                     </Modal.Header>
-                                    <Modal.Body className="from-popup-style">
+                                    <Modal.Body className="from-popup-style-walkIn">
                                         <div className="body-text-success">
                                             <FontAwesomeIcon icon={faCircleCheck} className="icon-faCircleCheck-Walk"></FontAwesomeIcon> <br />
-                                            <b style={{ fontFamily: 'Chivo Mono' }}>Walk In
+
+                                            <b className="text-walkIn" style={{ fontFamily: 'Chivo Mono' }}>Walk In
                                                 <b style={{ fontFamily: 'Noto Serif Thai', marginLeft: '10px' }}>สำเร็จ</b>
                                             </b>
+                                            {this.state.QR ?
+                                                (<>
+                                                    <img
+                                                        id="imgMenuDetail"
+                                                        src={this.state.QR}
+                                                        alt="QR"
+                                                        className="li-image-qr"
+                                                    />
+                                                </>) :
+                                                (<>
+                                                    <span className="text-qr">
+                                                        <p>NO QR</p>
+                                                    </span>
+                                                </>)
+                                            }
+                                            <a className="download_qr" download="QR.png" href={this.state.QR}>Download QR</a>
                                         </div>
                                     </Modal.Body>
-                                    <Modal.Footer className="from-popup-style">
+                                    <Modal.Footer className="from-popup-style-walkIn">
                                         <Button className="btn-footer" variant="primary"
                                             onClick={() => { this.handleClose() }}>
                                             ตกลง
@@ -330,6 +919,40 @@ class AdminWalkIn extends Component {
                                         </div>
                                     </Modal.Body>
                                     <Modal.Footer className="from-popup-style">
+                                        <Button className="btn-footer" variant="primary"
+                                            onClick={() => { this.handleClose() }}>
+                                            ตกลง
+                                        </Button>
+                                    </Modal.Footer>
+                                </div>
+                            </Modal>
+
+                            <Modal className="from-popup-booking-qr" show={this.state.showQr}
+                                onHide={() => { this.handleClose() }}>
+                                <div className="from-popup-style-booking-qr">
+                                    <Modal.Header closeButton className="from-popup-style-add-booking-qr">
+                                        <Modal.Title><b style={{ fontFamily: 'Chivo Mono' }}>QR</b></Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body className="from-popup-style-qr">
+                                        <div className="body-text-success">
+                                            {this.state.QR ?
+                                                (<>
+                                                    <img
+                                                        id="imgMenuDetail"
+                                                        src={this.state.QR}
+                                                        alt="QR"
+                                                        className="li-image-qr"
+                                                    />
+                                                </>) :
+                                                (<>
+                                                    <p>NO QR</p>
+                                                </>)
+                                            }
+                                            {/* <FontAwesomeIcon icon={faCircleExclamation} className="CircleExclamation"></FontAwesomeIcon> <br />
+                                            <b style={{ fontFamily: 'Noto Serif Thai' }}>กรุณาเลือกโต๊ะ</b> */}
+                                        </div>
+                                    </Modal.Body>
+                                    <Modal.Footer className="from-popup-style-qr">
                                         <Button className="btn-footer" variant="primary"
                                             onClick={() => { this.handleClose() }}>
                                             ตกลง

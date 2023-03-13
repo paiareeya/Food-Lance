@@ -23,34 +23,34 @@ class AdminOrders extends Component {
         ).then(response => {
             console.log('response:', response.data)
             const getMenuTrue = response.data.map((item) => {
-                const orders = item.order.map((order) => {
+                const order = item.customerOrders.map((customerOrders) => {
                     return {
-                        ...order,
+                        ...customerOrders,
                         getOrderStatus: false
                     }
                 })
                 return {
                     ...item,
-                    orders: orders
+                    customerOrders: order
                 }
-
             })
-            // console.log('getMenuTrue:', getMenuTrue)
             this.setState({
                 list_orders: getMenuTrue
             })
 
         });
+
+
     }
 
     onClickCheckBoxMenu = (indexBK, index) => {
         console.log('indexBK:', indexBK);
         console.log('index:', index);
         const list_meunu = this.state.list_orders
-        // console.log('list_meunu:', list_meunu);
+        console.log('list_meunu:', list_meunu);
 
-        const item = list_meunu[indexBK].orders[index].getOrderStatus;
-        list_meunu[indexBK].orders[index].getOrderStatus = !item
+        const item = list_meunu[indexBK].customerOrders[index].getOrderStatus;
+        list_meunu[indexBK].customerOrders[index].getOrderStatus = !item
 
         this.setState({
             list_orders: list_meunu
@@ -59,7 +59,8 @@ class AdminOrders extends Component {
     }
 
     onClickUpdateOrder = (menu) => {
-        const sed_order = menu.orders
+        console.log('menu', menu);
+        const sed_order = menu.customerOrders
         let arr_id = []
 
         sed_order.map((item) => {
@@ -93,10 +94,10 @@ class AdminOrders extends Component {
                                     </h5>
                                     <div className="card-body show-list-menu">
                                         <ul className="list-group list-group-flush ul-list-order-kitchen">
-                                            {item.order.map((list, ii) =>
+                                            {item.customerOrders.map((list, ii) =>
                                                 <li className="list-group-item li-list-order-kitchen" key={'list' + ii} >
                                                     <img src="https://th.bing.com/th/id/OIP.gUXqXGOmeut1G3cF1QCppAHaKm?pid=ImgDet&rs=1" className="li-image-kitchen" />
-                                                    <span>{list.title}</span>
+                                                    <span>{list.menuName}</span>
                                                     <span>{list.total}</span>
                                                     <input className="form-check-input me-1" type="checkbox" checked={list.getOrderStatus}
                                                         onChange={() => { this.onClickCheckBoxMenu(i, ii) }} />

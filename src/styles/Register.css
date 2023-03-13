@@ -46,9 +46,10 @@ input[type=text]:hover {
     padding-top: 30px;
 }
 .btn-sigUp {
-    width: 400px;
+    width: 300px;
     background-color: #FFB703;
     color: black;
+
 }
 .btn-sigUp:hover {
     background-color: #F8D273;
@@ -74,4 +75,68 @@ input[type=text]:hover {
     display: flex;
     margin-left: 10px;
     color: #FFB703;
+}
+.from-btn-sigUp > .link-sigUp {
+    color: #f55536;
+    text-decoration: none;
+    /* width: 100vw;
+    height: 28px; */
+    border-radius: 5px;
+    text-align: center;
+    font-family: "Chivo Mono", monospace;
+}
+.from-btn-sigUp > .link-sigUp:hover {
+    color: #ff773d;
+}
+.select-style-position {
+    width: 150px;
+    height: 30px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    font-family: 'Noto Serif Thai', serif;
+    font-weight: bold;
+}
+
+.select-style-position select {
+    padding: 5px 8px;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    background-color: #FFB703;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.select-style-position:after {
+    top: 50%;
+    left: 85%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(0, 0, 0, 0);
+    border-top-color: #000000;
+    border-width: 5px;
+    margin-top: -2px;
+    z-index: 100;
+}
+
+.select-style-position select:focus {
+    outline: none;
+}
+
+.register-logo {
+    text-align: center;
+}
+.register-img {
+    margin-top: 52px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 350px;
+    height: 350px;
+    object-fit: cover;
 }

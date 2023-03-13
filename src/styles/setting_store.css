@@ -5,34 +5,41 @@
     background-color: #000814;
     color: white;
 }
+
 .crad-setting-store {
     margin-top: 10px;
     border: none;
-    width: 60vw;
+    width: 40vw;
 }
+
 .header-text-store {
     font-family: "Chivo Mono", monospace;
     font-weight: bold;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
 .row-cols-auto {
     font-family: "Chivo Mono", monospace;
 }
+
 .from-store-input {
     font-family: "Chivo Mono", monospace;
     margin-top: 10px;
     margin-left: 20px;
 }
+
 .store-label {
     margin-top: 50px;
     text-align: center;
 }
+
 .store-text {
     display: flex;
     margin-left: 10px;
     font-weight: bold;
     font-family: "Chivo Mono", monospace;
 }
+
 input[type=text] {
     font-family: "Chivo Mono", monospace;
     color: black;
@@ -41,9 +48,11 @@ input[type=text] {
     background-color: #00081400;
     width: 200px;
 }
+
 input[type=text]:hover {
     border-bottom: 2px solid #ff773d;
 }
+
 .btn-confirm-store {
     width: 100px;
     background-color: #FFB703;
@@ -51,11 +60,12 @@ input[type=text]:hover {
     text-decoration: none;
     border: none;
     font-weight: bold;
-    margin-left: 88%;
+    margin-left: 32vw;
     font-family: 'Noto Serif Thai', serif;
 }
+
 .btn-confirm-store:hover {
     background-color: #F8D273;
     color: black;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 3px 10px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }

@@ -12,6 +12,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.2",
+    "blueimp-load-image": "^5.16.0",
     "bootstrap": "^5.2.3",
     "moment-timezone": "^0.5.40",
     "react": "^18.2.0",
@@ -23,6 +24,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.7.0",
     "react-time-picker": "^5.2.0",
+    "sass": "^1.58.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

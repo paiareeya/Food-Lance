@@ -28,9 +28,9 @@ class Navbar extends Component {
                                     isActive ? 'link active' : 'link'
                                 }>Home</NavLink>
 
-                                <NavLink to='/menu' className={({ isActive }) =>
+                                {/* <NavLink to='/menu' className={({ isActive }) =>
                                     isActive ? 'link active' : 'link'
-                                }>Menu</NavLink>
+                                }>Menu</NavLink> */}
 
                                 <NavLink to='/booking' className={({ isActive }) =>
                                     isActive ? 'link active' : 'link'
@@ -55,11 +55,11 @@ class Navbar extends Component {
                                                 <FontAwesomeIcon icon={faMoneyBill}></FontAwesomeIcon>
                                             </NavLink>
                                         </div>
-                                        <div className="col icon-tab">
+                                        {/* <div className="col icon-tab">
                                             <NavLink to='/basket' className={({ isActive }) => isActive ? 'link active' : 'link'}>
                                                 <FontAwesomeIcon icon={faBasketShopping}></FontAwesomeIcon>
                                             </NavLink>
-                                        </div>
+                                        </div> */}
                                         <div className="col icon-tab">
                                             <NavLink to='/about' className={({ isActive }) => isActive ? 'link active' : 'link'}>
                                                 <FontAwesomeIcon icon={faBell}></FontAwesomeIcon>

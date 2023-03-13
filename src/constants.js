@@ -1,7 +1,8 @@
 const config = {
-    URL: 'http://192.168.1.78:8080/',
+    URL: 'http://192.168.1.22:8080/',
     API: {
         MENUS: {
+            FIND_MENU: 'all-menu',
             CREATE_MENU: 'create-menu',
             CATEGORY_MENU: 'category-menu',
             DELETE_MENU: 'delete-menu'
@@ -37,7 +38,7 @@ const config = {
         STORES: {
             FIND_STORE: 'show-shop',
             CREATE_STORE: 'create-shop',
-            // UPDATE_SHOP: 'update-shop',
+            UPDATE_SHOP: 'update-shop',
             // DELETE_SHOP: 'delete-shop'
         },
         TIMES: {
@@ -45,6 +46,15 @@ const config = {
             CREATE_TIME: 'Create_time',
             // UPDATE_TIME: 'update-time',
             DELETE_TIME: 'Delete_time'
+        },
+        REPORT: {
+            FIND_REPORT: 'report-and-excel',
+        },
+        QR: {
+            FIND_QR: 'find-qr',
+            CREATE_QR: 'QR-code',
+            UPDATE_QR: 'update-qr',
+            DELETE_QR: 'delete-qr'
         }
     }
 }
